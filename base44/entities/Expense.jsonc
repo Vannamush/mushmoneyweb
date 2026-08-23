@@ -1,0 +1,28 @@
+{
+  "name": "Expense",
+  "type": "object",
+  "properties": {
+    "amount": {
+      "type": "number",
+      "title": "Amount"
+    },
+    "category_id": {
+      "type": "string",
+      "title": "Category"
+    },
+    "note": {
+      "type": "string",
+      "title": "Note"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    }
+  },
+  "required": [
+    "amount",
+    "category_id",
+    "date"
+  ]
+}

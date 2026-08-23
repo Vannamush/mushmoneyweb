@@ -1,0 +1,21 @@
+{
+  "name": "Settings",
+  "type": "object",
+  "properties": {
+    "budget": {
+      "type": "number",
+      "title": "Monthly budget",
+      "default": 6000
+    },
+    "theme": {
+      "type": "string",
+      "enum": [
+        "minimal",
+        "dark",
+        "playful"
+      ],
+      "title": "Theme",
+      "default": "minimal"
+    }
+  }
+}
