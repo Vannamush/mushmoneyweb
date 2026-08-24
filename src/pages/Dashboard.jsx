@@ -15,16 +15,16 @@ export default function Dashboard() {
   const { data: incomes = [] } = useIncomes();
   const budget = settings?.budget ?? 6000;
 
-  const monthIncomes = useMemo(() => incomes.filter((i) => isSameMonth(i.date)), [incomes]);
-  const totalIncome = monthIncomes.reduce((s, i) => s + Number(i.amount), 0);
-  const net = totalIncome - totalSpent;
-
   const catMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.id, c])), [categories]);
 
   const monthExpenses = useMemo(() => expenses.filter((e) => isSameMonth(e.date)), [expenses]);
   const totalSpent = monthExpenses.reduce((s, e) => s + Number(e.amount), 0);
   const remaining = budget - totalSpent;
   const safeToSpend = Math.max(0, remaining) / daysLeftInMonth();
+
+  const monthIncomes = useMemo(() => incomes.filter((i) => isSameMonth(i.date)), [incomes]);
+  const totalIncome = monthIncomes.reduce((s, i) => s + Number(i.amount), 0);
+  const net = totalIncome - totalSpent;
 
   const byCategory = useMemo(() => {
     const map = {};
