@@ -1,14 +1,20 @@
 import { secrets } from "base44:runtime";
 
-const PRICE_ID = "price_1U7lLQAiwDinSVSGPMPKRHSQ";
+const PRICES: Record<string, string> = {
+  monthly: "price_1U7lLQAiwDinSVSGPMPKRHSQ",
+  yearly: "price_1U7lPFAiwDinSVSGxu6j2dYo",
+};
 const APP_URL = "https://mush-money-track.base44.app";
 
 export default async function(req: Request): Promise<Response> {
   try {
+    const body = await req.json().catch(() => ({}));
+    const plan = body.plan === "yearly" ? "yearly" : "monthly";
+
     const sk = secrets.get("STRIPE_SECRET_KEY");
     const params = new URLSearchParams();
     params.append("mode", "subscription");
-    params.append("line_items[0][price]", PRICE_ID);
+    params.append("line_items[0][price]", PRICES[plan]);
     params.append("line_items[0][quantity]", "1");
     params.append("success_url", `${APP_URL}/settings?payment=success`);
     params.append("cancel_url", `${APP_URL}/settings?payment=cancelled`);

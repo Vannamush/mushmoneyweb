@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, Check, Sparkles } from 'lucide-react';
 import { useSettings, useRefresh } from '@/lib/api';
 import { useTheme } from '@/lib/theme';
+import ProPlans from '@/components/ProPlans';
 
 const THEMES = [
   { id: 'minimal', name: 'Clean & Minimal', desc: 'Airy and light', preview: 'bg-white border border-border' },
@@ -20,28 +21,9 @@ export default function Settings() {
   const { theme, setTheme } = useTheme();
   const [budget, setBudget] = useState(settings ? String(settings.budget) : '6000');
   const [saving, setSaving] = useState(false);
-  const [checkoutBusy, setCheckoutBusy] = useState(false);
 
   const isPro = settings?.subscription_status === 'active';
   const justPaid = new URLSearchParams(window.location.search).get('payment') === 'success';
-
-  const handleCheckout = async () => {
-    if (window.self !== window.top) {
-      alert('Checkout only works from the published app. Open the app in a new tab to upgrade.');
-      return;
-    }
-    setCheckoutBusy(true);
-    try {
-      const res = await base44.functions.invoke('createCheckout', {});
-      if (res.data?.url) {
-        window.location.href = res.data.url;
-      } else {
-        setCheckoutBusy(false);
-      }
-    } catch (e) {
-      setCheckoutBusy(false);
-    }
-  };
 
   const saveBudget = async () => {
     setSaving(true);
@@ -79,13 +61,7 @@ export default function Settings() {
             </div>
           </div>
         ) : (
-          <div className="rounded-2xl border border-border bg-card p-4">
-            <p className="text-sm mb-1">Unlock premium features for $4.99/month.</p>
-            <p className="text-xs text-muted-foreground mb-3">Cancel anytime.</p>
-            <Button onClick={handleCheckout} disabled={checkoutBusy} className="w-full h-12">
-              {checkoutBusy ? 'Opening checkout…' : 'Upgrade to Pro'}
-            </Button>
-          </div>
+          <ProPlans />
         )}
       </div>
 
