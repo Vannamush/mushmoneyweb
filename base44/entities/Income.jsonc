@@ -1,0 +1,28 @@
+{
+  "name": "Income",
+  "type": "object",
+  "properties": {
+    "amount": {
+      "type": "number",
+      "title": "Amount"
+    },
+    "source": {
+      "type": "string",
+      "title": "Source"
+    },
+    "note": {
+      "type": "string",
+      "title": "Note"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    }
+  },
+  "required": [
+    "amount",
+    "source",
+    "date"
+  ]
+}

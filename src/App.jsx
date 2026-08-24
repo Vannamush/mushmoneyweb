@@ -11,6 +11,7 @@ import { ThemeProvider } from '@/lib/theme';
 import Layout from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
 import AddExpense from '@/pages/AddExpense';
+import AddIncome from '@/pages/AddIncome';
 import History from '@/pages/History';
 import Months from '@/pages/Months';
 import Categories from '@/pages/Categories';
@@ -54,6 +55,7 @@ const AuthenticatedApp = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/add" element={<AddExpense />} />
+          <Route path="/add-income" element={<AddIncome />} />
           <Route path="/history" element={<History />} />
           <Route path="/months" element={<Months />} />
           <Route path="/categories" element={<Categories />} />

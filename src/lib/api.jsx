@@ -4,6 +4,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 export const useExpenses = () =>
   useQuery({ queryKey: ['expenses'], queryFn: async () => base44.entities.Expense.list('-date', 1000) });
 
+export const useIncomes = () =>
+  useQuery({ queryKey: ['incomes'], queryFn: async () => base44.entities.Income.list('-date', 1000) });
+
 export const useCategories = () =>
   useQuery({ queryKey: ['categories'], queryFn: async () => base44.entities.Category.list('sort_order', 100) });
 

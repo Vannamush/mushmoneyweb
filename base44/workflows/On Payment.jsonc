@@ -1,0 +1,43 @@
+{
+  "description": "Updates Mushmoney Pro subscription status when a payment succeeds or is refunded",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "app_payment",
+      "events": [
+        "payment_succeeded",
+        "payment_refunded"
+      ]
+    }
+  },
+  "name": "On Payment",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "on_payment",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "update_status": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "onPayment",
+            "args": {
+              "event_type": "${ .trigger.event_type }",
+              "mode": "${ .trigger.mode }",
+              "amount": "${ .trigger.amount }",
+              "currency": "${ .trigger.currency }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Update subscription status",
+            "description": "From Stripe payment event"
+          }
+        }
+      }
+    ]
+  }
+}

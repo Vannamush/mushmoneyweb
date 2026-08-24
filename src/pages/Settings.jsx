@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Check } from 'lucide-react';
+import { ChevronLeft, Check, Sparkles } from 'lucide-react';
 import { useSettings, useRefresh } from '@/lib/api';
 import { useTheme } from '@/lib/theme';
 
@@ -20,6 +20,28 @@ export default function Settings() {
   const { theme, setTheme } = useTheme();
   const [budget, setBudget] = useState(settings ? String(settings.budget) : '6000');
   const [saving, setSaving] = useState(false);
+  const [checkoutBusy, setCheckoutBusy] = useState(false);
+
+  const isPro = settings?.subscription_status === 'active';
+  const justPaid = new URLSearchParams(window.location.search).get('payment') === 'success';
+
+  const handleCheckout = async () => {
+    if (window.self !== window.top) {
+      alert('Checkout only works from the published app. Open the app in a new tab to upgrade.');
+      return;
+    }
+    setCheckoutBusy(true);
+    try {
+      const res = await base44.functions.invoke('createCheckout', {});
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      } else {
+        setCheckoutBusy(false);
+      }
+    } catch (e) {
+      setCheckoutBusy(false);
+    }
+  };
 
   const saveBudget = async () => {
     setSaving(true);
@@ -38,6 +60,33 @@ export default function Settings() {
           <ChevronLeft className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold">Settings</h1>
+      </div>
+
+      {justPaid && (
+        <div className="mb-6 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 text-sm text-emerald-800">
+          Thanks for upgrading! Your Pro status will activate shortly.
+        </div>
+      )}
+
+      <div className="mb-8">
+        <h2 className="text-sm font-medium mb-3">Mushmoney Pro</h2>
+        {isPro ? (
+          <div className="flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+            <Sparkles className="h-5 w-5 text-emerald-600 shrink-0" />
+            <div>
+              <p className="font-medium text-emerald-800">Pro is active</p>
+              <p className="text-xs text-emerald-700">Thanks for supporting Mushmoney!</p>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-sm mb-1">Unlock premium features for $4.99/month.</p>
+            <p className="text-xs text-muted-foreground mb-3">Cancel anytime.</p>
+            <Button onClick={handleCheckout} disabled={checkoutBusy} className="w-full h-12">
+              {checkoutBusy ? 'Opening checkout…' : 'Upgrade to Pro'}
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="mb-8">

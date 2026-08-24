@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings as SettingsIcon, TrendingUp, AlertTriangle } from 'lucide-react';
-import { useExpenses, useCategories, useSettings } from '@/lib/api';
+import { Settings as SettingsIcon, TrendingUp, AlertTriangle, Plus } from 'lucide-react';
+import { useExpenses, useCategories, useSettings, useIncomes } from '@/lib/api';
 import { formatCurrency, formatCurrencyExact, daysLeftInMonth, isSameMonth } from '@/lib/money';
 import ProgressBar from '@/components/ProgressBar';
 import DonutChart from '@/components/DonutChart';
@@ -12,7 +12,12 @@ export default function Dashboard() {
   const { data: expenses = [] } = useExpenses();
   const { data: categories = [] } = useCategories();
   const { data: settings } = useSettings();
+  const { data: incomes = [] } = useIncomes();
   const budget = settings?.budget ?? 6000;
+
+  const monthIncomes = useMemo(() => incomes.filter((i) => isSameMonth(i.date)), [incomes]);
+  const totalIncome = monthIncomes.reduce((s, i) => s + Number(i.amount), 0);
+  const net = totalIncome - totalSpent;
 
   const catMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.id, c])), [categories]);
 
@@ -58,6 +63,21 @@ export default function Dashboard() {
         <p className="text-sm text-muted-foreground mb-1">Spent this month</p>
         <p className="text-5xl font-bold tracking-tight">{formatCurrency(totalSpent)}</p>
         <p className="text-sm text-muted-foreground mt-1">of {formatCurrency(budget)} budget</p>
+      </div>
+
+      <div className="flex items-stretch gap-2 mb-5">
+        <div className="flex-1 rounded-xl bg-muted p-3">
+          <p className="text-xs text-muted-foreground">Income</p>
+          <p className="font-semibold text-emerald-600">{formatCurrency(totalIncome)}</p>
+        </div>
+        <div className="flex-1 rounded-xl bg-muted p-3">
+          <p className="text-xs text-muted-foreground">Net</p>
+          <p className={`font-semibold ${net >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>{formatCurrency(net)}</p>
+        </div>
+        <button onClick={() => navigate('/add-income')} className="rounded-xl bg-muted px-3 flex flex-col items-center justify-center gap-0.5">
+          <Plus className="h-5 w-5" />
+          <span className="text-[10px] text-muted-foreground">Income</span>
+        </button>
       </div>
 
       <ProgressBar value={totalSpent} max={budget} />

@@ -16,6 +16,16 @@
       ],
       "title": "Theme",
       "default": "minimal"
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "active",
+        "cancelled"
+      ],
+      "title": "Subscription status",
+      "default": "none"
     }
   }
 }
