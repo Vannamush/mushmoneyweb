@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Check, Sparkles } from 'lucide-react';
+import { ChevronLeft, Check, Sparkles, FileUp } from 'lucide-react';
 import { useSettings, useRefresh } from '@/lib/api';
 import { useTheme } from '@/lib/theme';
 import ProPlans from '@/components/ProPlans';
@@ -63,6 +63,20 @@ export default function Settings() {
         ) : (
           <ProPlans />
         )}
+      </div>
+
+      <div className="mb-8">
+        <h2 className="text-sm font-medium mb-3">Bank import</h2>
+        <button
+          onClick={() => navigate('/import')}
+          className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left"
+        >
+          <FileUp className="h-5 w-5 text-muted-foreground shrink-0" />
+          <div className="flex-1">
+            <p className="font-medium">Import a CSV</p>
+            <p className="text-xs text-muted-foreground">Upload a bank export and auto-categorize it</p>
+          </div>
+        </button>
       </div>
 
       <div className="mb-8">

@@ -7,6 +7,9 @@ export const useExpenses = () =>
 export const useIncomes = () =>
   useQuery({ queryKey: ['incomes'], queryFn: async () => base44.entities.Income.list('-date', 1000) });
 
+export const useKeywordRules = () =>
+  useQuery({ queryKey: ['keywordRules'], queryFn: async () => base44.entities.KeywordRule.list('-created_date', 200) });
+
 export const useCategories = () =>
   useQuery({ queryKey: ['categories'], queryFn: async () => base44.entities.Category.list('sort_order', 100) });
 
