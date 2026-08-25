@@ -1,0 +1,51 @@
+{
+  "name": "Client",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Full name"
+    },
+    "phone": {
+      "type": "string",
+      "title": "Phone"
+    },
+    "style": {
+      "type": "string",
+      "title": "Current style"
+    },
+    "pattern": {
+      "type": "string",
+      "title": "Pattern & part size"
+    },
+    "hair_type": {
+      "type": "string",
+      "title": "Hair type / hair used"
+    },
+    "retwist_schedule": {
+      "type": "string",
+      "title": "Retwist schedule"
+    },
+    "style_duration": {
+      "type": "string",
+      "title": "How long the style takes"
+    },
+    "preferences": {
+      "type": "string",
+      "title": "Preferences & sensitivities"
+    },
+    "personal_notes": {
+      "type": "string",
+      "title": "Personal notes"
+    },
+    "last_visit": {
+      "type": "string",
+      "format": "date",
+      "title": "Last visit"
+    }
+  },
+  "required": [
+    "name",
+    "phone"
+  ]
+}

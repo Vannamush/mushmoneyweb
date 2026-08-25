@@ -1,0 +1,32 @@
+{
+  "name": "Visit",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "title": "Client"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "title": "Date"
+    },
+    "service": {
+      "type": "string",
+      "title": "What was done"
+    },
+    "note": {
+      "type": "string",
+      "title": "Note"
+    },
+    "photo_url": {
+      "type": "string",
+      "title": "Photo"
+    }
+  },
+  "required": [
+    "client_id",
+    "date",
+    "service"
+  ]
+}

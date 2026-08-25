@@ -17,6 +17,11 @@ import Import from '@/pages/Import';
 import Months from '@/pages/Months';
 import Categories from '@/pages/Categories';
 import Settings from '@/pages/Settings';
+import BookLayout from '@/components/book/BookLayout';
+import BookHome from '@/pages/book/BookHome';
+import ClientCard from '@/pages/book/ClientCard';
+import AddVisit from '@/pages/book/AddVisit';
+import OwnerDashboard from '@/pages/book/OwnerDashboard';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -62,6 +67,12 @@ const AuthenticatedApp = () => {
           <Route path="/months" element={<Months />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/settings" element={<Settings />} />
+        </Route>
+        <Route path="/book" element={<BookLayout />}>
+          <Route index element={<BookHome />} />
+          <Route path="client/:id" element={<ClientCard />} />
+          <Route path="add-visit" element={<AddVisit />} />
+          <Route path="dashboard" element={<OwnerDashboard />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />
