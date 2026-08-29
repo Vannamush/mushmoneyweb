@@ -16,20 +16,58 @@ export default function Layout() {
   const isActive = (path) => (path === '/' ? location.pathname === '/' : location.pathname.startsWith(path));
 
   return (
-    <div className="min-h-screen bg-background text-foreground max-w-md mx-auto">
-      <main className="pb-28">
-        <Outlet />
-      </main>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 border-r border-border bg-card flex-col z-40">
+        <div className="px-5 py-6 border-b border-border">
+          <p className="text-sm text-muted-foreground">Mushmoney</p>
+          <h1 className="text-lg font-semibold">Budget Tracker</h1>
+        </div>
+        <nav className="flex-1 px-3 py-4 space-y-1">
+          {navItems.map((item) => {
+            const active = isActive(item.to);
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
+                  active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                )}
+              >
+                <item.icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="p-3 border-t border-border">
+          <button
+            onClick={() => navigate('/add')}
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground h-11 font-medium hover:bg-primary/90 transition"
+          >
+            <Plus className="h-5 w-5" strokeWidth={2.5} /> Add expense
+          </button>
+        </div>
+      </aside>
 
+      <div className="lg:pl-64">
+        <main className="mx-auto max-w-2xl pb-28 lg:pb-12">
+          <Outlet />
+        </main>
+      </div>
+
+      {/* Mobile floating add button */}
       <button
         onClick={() => navigate('/add')}
-        className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 h-16 w-16 rounded-full bg-primary text-primary-foreground shadow-xl flex items-center justify-center active:scale-95 transition"
+        className="lg:hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-50 h-16 w-16 rounded-full bg-primary text-primary-foreground shadow-xl flex items-center justify-center active:scale-95 transition"
         aria-label="Add expense"
       >
         <Plus className="h-7 w-7" strokeWidth={2.5} />
       </button>
 
-      <nav className="fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40">
+      {/* Mobile bottom nav */}
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40">
         <div className="flex items-center justify-around h-16 px-2">
           {navItems.slice(0, 2).map((item) => (
             <NavBtn key={item.to} {...item} active={isActive(item.to)} />

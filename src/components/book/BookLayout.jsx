@@ -15,18 +15,48 @@ export default function BookLayout() {
 
   return (
     <div data-theme="clientbook" className="min-h-screen bg-background text-foreground font-body">
-      <header className="sticky top-0 z-40 bg-primary text-primary-foreground border-b-4 border-brand">
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 bg-primary text-primary-foreground border-r-4 border-brand flex-col z-40">
+        <div className="px-5 py-6 text-center border-b border-white/10">
+          <h1 className="font-display text-3xl tracking-[0.18em] leading-none">{SHOP_NAME}</h1>
+          <p className="text-[10px] uppercase tracking-[0.3em] opacity-70 mt-1">{SHOP_TAGLINE}</p>
+        </div>
+        <nav className="flex-1 px-3 py-4 space-y-1">
+          {items.map(({ to, label, icon: Icon }) => {
+            const active = isActive(to);
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
+                  active ? 'bg-brand text-brand-foreground font-semibold' : 'text-primary-foreground/80 hover:bg-white/10'
+                )}
+              >
+                <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
+
+      {/* Mobile header */}
+      <header className="lg:hidden sticky top-0 z-40 bg-primary text-primary-foreground border-b-4 border-brand">
         <div className="max-w-2xl mx-auto px-5 py-3 text-center">
           <h1 className="font-display text-3xl tracking-[0.18em] leading-none">{SHOP_NAME}</h1>
           <p className="text-[10px] uppercase tracking-[0.3em] opacity-70 mt-1">{SHOP_TAGLINE}</p>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto pb-24">
-        <Outlet />
-      </main>
+      <div className="lg:pl-64">
+        <main className="max-w-2xl mx-auto pb-24 lg:pb-12">
+          <Outlet />
+        </main>
+      </div>
 
-      <nav className="fixed bottom-0 inset-x-0 z-40 bg-card border-t border-border">
+      {/* Mobile bottom nav */}
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-card border-t border-border">
         <div className="max-w-2xl mx-auto flex h-16">
           {items.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} className="flex-1 flex flex-col items-center justify-center gap-1">
