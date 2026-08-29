@@ -7,8 +7,39 @@ const PRICES: Record<string, string> = {
 };
 const APP_URL = "https://mush-money-track.base44.app";
 
+// --- Guards against unauthorized use ---
+// 1) Origin: only allow requests originating from this app (published or preview).
+const APP_HOST = "mush-money-track.base44.app";
+function authorizedOrigin(req: Request): boolean {
+  const origin = req.headers.get("origin") || "";
+  const referer = req.headers.get("referer") || "";
+  if (!origin && !referer) return true; // platform-internal call with no browser headers
+  return origin.includes(APP_HOST) || referer.includes(APP_HOST);
+}
+// 2) Rate limit: cap checkout starts per client to prevent spam/abuse.
+const RATE = { max: 10, windowMs: 60_000 };
+const hits = new Map<string, number[]>();
+function clientKey(req: Request): string {
+  const fwd = req.headers.get("x-forwarded-for") || "";
+  return fwd.split(",")[0].trim() || req.headers.get("x-real-ip") || "unknown";
+}
+function rateLimited(key: string): boolean {
+  const now = Date.now();
+  const arr = (hits.get(key) || []).filter((t) => now - t < RATE.windowMs);
+  if (arr.length >= RATE.max) return true;
+  arr.push(now);
+  hits.set(key, arr);
+  return false;
+}
+
 export default async function(req: Request): Promise<Response> {
   try {
+    if (!authorizedOrigin(req)) {
+      return Response.json({ error: "Unauthorized: requests must come from this app." }, { status: 403 });
+    }
+    if (rateLimited(clientKey(req))) {
+      return Response.json({ error: "Too many checkout attempts. Please slow down and try again shortly." }, { status: 429 });
+    }
     const body = await req.json().catch(() => ({}));
     const sk = secrets.get("STRIPE_SECRET_KEY");
     const appId = Deno.env.get("BASE44_APP_ID") || "";
