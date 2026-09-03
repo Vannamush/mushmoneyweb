@@ -1,0 +1,37 @@
+{
+  "name": "Bill",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "amount": {
+      "type": "number",
+      "title": "Amount"
+    },
+    "interval": {
+      "type": "string",
+      "enum": [
+        "month",
+        "year"
+      ],
+      "title": "Interval",
+      "default": "month"
+    },
+    "note": {
+      "type": "string",
+      "title": "Note"
+    },
+    "last_paid": {
+      "type": "string",
+      "format": "date",
+      "title": "Last charged"
+    }
+  },
+  "required": [
+    "name",
+    "amount",
+    "interval"
+  ]
+}
