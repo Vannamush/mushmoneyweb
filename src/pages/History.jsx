@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useExpenses, useCategories } from '@/lib/api';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import ExpenseRow from '@/components/ExpenseRow';
@@ -9,9 +10,17 @@ export default function History() {
   const { data: expenses = [] } = useExpenses();
   const { data: categories = [] } = useCategories();
   const catMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.id, c])), [categories]);
+  const [searchParams] = useSearchParams();
   const [monthFilter, setMonthFilter] = useState('all');
   const [catFilter, setCatFilter] = useState('all');
   const [editing, setEditing] = useState(null);
+
+  useEffect(() => {
+    const name = searchParams.get('category');
+    if (!name) return;
+    const match = categories.find((c) => c.name === name);
+    if (match) setCatFilter(match.id);
+  }, [searchParams, categories]);
 
   const months = useMemo(() => {
     const set = new Set(expenses.map((e) => monthKey(new Date(e.date))));

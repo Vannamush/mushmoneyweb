@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -10,12 +10,18 @@ const navItems = [
   { to: '/categories', label: 'Tags', icon: Tag },
   { to: '/pay', label: 'Pay', icon: CreditCard },
   { to: '/bills', label: 'Bills', icon: Receipt },
+  { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
+  { to: '/bills', label: 'Student Loans', icon: GraduationCap, desktopOnly: true, matchPath: '/bills' },
 ];
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isActive = (path) => (path === '/' ? location.pathname === '/' : location.pathname.startsWith(path));
+  const isActive = (path) => {
+    const p = path.split('?')[0];
+    return p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
+  };
+  const mobileItems = navItems.filter((i) => !i.desktopOnly);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -71,11 +77,11 @@ export default function Layout() {
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40">
         <div className="flex items-center justify-around h-16 px-2">
-          {navItems.slice(0, 2).map((item) => (
+          {mobileItems.slice(0, 2).map((item) => (
             <NavBtn key={item.to} {...item} active={isActive(item.to)} />
           ))}
           <div className="w-16" />
-          {navItems.slice(2).map((item) => (
+          {mobileItems.slice(2).map((item) => (
             <NavBtn key={item.to} {...item} active={isActive(item.to)} />
           ))}
         </div>
