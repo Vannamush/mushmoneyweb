@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/history', label: 'History', icon: History },
   { to: '/months', label: 'Months', icon: CalendarDays },
   { to: '/categories', label: 'Tags', icon: Tag },
+  { to: '/pay', label: 'Pay', icon: CreditCard },
 ];
 
 export default function Layout() {
