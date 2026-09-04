@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -8,12 +9,16 @@ import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 
 export default function Bills() {
+  const [params] = useSearchParams();
+  const nameFilter = params.get('name');
   const { data: bills = [] } = useBills();
   const refresh = useRefresh(['bills']);
   const [editing, setEditing] = useState(null);
   const [adding, setAdding] = useState(false);
   const [paying, setPaying] = useState(null);
   const [error, setError] = useState('');
+
+  const visible = nameFilter ? bills.filter((b) => b.name === nameFilter) : bills;
 
   const del = async (b) => {
     if (!confirm(`Delete "${b.name}"?`)) return;
@@ -63,13 +68,13 @@ export default function Bills() {
       {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
 
       <div className="space-y-2">
-        {bills.length === 0 && (
+        {visible.length === 0 && (
           <div className="rounded-2xl border border-dashed border-border p-8 text-center">
             <Home className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">No bills yet. Add your mortgage or any recurring bill to charge it to a card.</p>
           </div>
         )}
-        {bills.map((b) => (
+        {visible.map((b) => (
           <div key={b.id} className="rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-3">
               <div className="flex-1 min-w-0">

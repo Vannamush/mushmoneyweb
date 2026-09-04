@@ -11,16 +11,19 @@ const navItems = [
   { to: '/pay', label: 'Pay', icon: CreditCard },
   { to: '/bills', label: 'Bills', icon: Receipt },
   { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
-  { to: '/bills', label: 'Student Loans', icon: GraduationCap, desktopOnly: true, matchPath: '/bills' },
-  { to: '/bills', label: 'Mortgage', icon: Building2, desktopOnly: true, matchPath: '/bills' },
+  { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
+  { to: '/bills?name=Mortgage', label: 'Mortgage', icon: Building2, desktopOnly: true },
 ];
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const isActive = (path) => {
-    const p = path.split('?')[0];
-    return p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
+    const [p, q] = path.split('?');
+    const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
+    if (!baseMatch) return false;
+    if (q) return location.search === `?${q}`;
+    return true;
   };
   const mobileItems = navItems.filter((i) => !i.desktopOnly);
 
