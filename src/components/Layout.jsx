@@ -25,6 +25,8 @@ export default function Layout() {
     const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
     if (!baseMatch) return false;
     if (q) return location.search === `?${q}`;
+    if (p === '/history') return !location.search.includes('category=');
+    if (p === '/bills') return !location.search.includes('name=');
     return true;
   };
   const mobileItems = navItems.filter((i) => !i.desktopOnly);
