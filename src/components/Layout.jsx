@@ -24,7 +24,14 @@ export default function Layout() {
     const [p, q] = path.split('?');
     const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
     if (!baseMatch) return false;
-    if (q) return location.search === `?${q}`;
+    if (q) {
+      const linkParams = new URLSearchParams(q);
+      const currentParams = new URLSearchParams(location.search);
+      for (const [k, v] of linkParams) {
+        if (currentParams.get(k) !== v) return false;
+      }
+      return true;
+    }
     if (p === '/history') return !location.search.includes('category=');
     if (p === '/bills') return !location.search.includes('name=');
     return true;
