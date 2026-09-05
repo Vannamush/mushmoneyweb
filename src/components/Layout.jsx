@@ -11,7 +11,7 @@ const navItems = [
   { to: '/bills', label: 'Bills', icon: Receipt },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
   { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
-  { to: '/history?category=Medical', label: 'Medical', icon: HeartPulse, desktopOnly: true },
+  { to: '/history?category=Medical|Pharmacy %26 Medications', label: 'Medical', icon: HeartPulse, desktopOnly: true },
   {
     label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
     children: [
@@ -62,7 +62,7 @@ const navItems = [
     children: [
       { to: '/history?category=Health', label: 'Health' },
       { to: '/history?category=Dental', label: 'Dental' },
-      { to: '/history?category=Pharmacy %26 Medications', label: 'Pharmacy & Medications' },
+      { to: '/history?category=Medical|Pharmacy %26 Medications', label: 'Pharmacy & Medications' },
       { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialist Visits' },
       { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness Equipment & Supplements' },
     ],
