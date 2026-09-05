@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, Tag, Plus, CreditCard, Receipt, Car, HeartPulse, ShoppingBasket, PiggyBank, MonitorPlay, Activity, ShoppingBag, Gift, ChevronDown } from 'lucide-react';
+import { Outlet, useLocation, Link } from 'react-router-dom';
+import { Home, History, Tag, CreditCard, Receipt, Car, HeartPulse, ShoppingBasket, PiggyBank, MonitorPlay, Activity, ShoppingBag, Gift, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -162,7 +162,6 @@ const groupTarget = (label, children) => {
 
 export default function Layout() {
   const location = useLocation();
-  const navigate = useNavigate();
   const [openGroups, setOpenGroups] = useState({});
   const isActive = (path) => {
     const [p, q] = path.split('?');
@@ -292,23 +291,10 @@ export default function Layout() {
         </main>
       </div>
 
-      {/* Mobile floating add button */}
-      <button
-        onClick={() => navigate('/add')}
-        className="lg:hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-50 h-16 w-16 rounded-full bg-primary text-primary-foreground shadow-xl flex items-center justify-center active:scale-95 transition"
-        aria-label="Add expense"
-      >
-        <Plus className="h-7 w-7" strokeWidth={2.5} />
-      </button>
-
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40">
         <div className="flex items-center justify-around h-16 px-2">
-          {mobileItems.slice(0, 2).map((item) => (
-            <NavBtn key={item.to} {...item} active={isActive(item.to)} />
-          ))}
-          <div className="w-16" />
-          {mobileItems.slice(2).map((item) => (
+          {mobileItems.map((item) => (
             <NavBtn key={item.to} {...item} active={isActive(item.to)} />
           ))}
         </div>
