@@ -72,7 +72,7 @@ export default function Bills() {
       <SelectorHeader
         icon={Receipt}
         title="Bills"
-        pills={[{ key: 'all', label: 'All bills' }, ...GROUPS.map((g) => ({ key: g.key, label: g.short }))]}
+        pills={GROUPS.map((g) => ({ key: g.key, label: g.short }))}
         selectedKey={groupFilter || 'all'}
         onSelect={(key) => setParams(key === 'all' ? {} : { group: key })}
         action={
