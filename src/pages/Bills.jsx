@@ -4,17 +4,18 @@ import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Trash2, Pencil, Plus, CreditCard, Home } from 'lucide-react';
+import { Trash2, Pencil, Plus, CreditCard, Home, Receipt } from 'lucide-react';
 import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
+import SelectorHeader from '@/components/SelectorHeader';
 
 const GROUPS = [
-  { key: 'housing', label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
-  { key: 'transportation', label: 'Transportation (Mixed)', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
+  { key: 'housing', label: 'Housing & Essential Utilities (Fixed/Needs)', short: 'Housing & Essentials', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
+  { key: 'transportation', label: 'Transportation (Mixed)', short: 'Transportation', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
 ];
 
 export default function Bills() {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const nameFilter = params.get('name');
   const groupFilter = params.get('group');
   const { data: bills = [] } = useBills();
@@ -68,15 +69,18 @@ export default function Bills() {
 
   return (
     <div className="px-5 pt-6">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-semibold">Bills</h1>
-          <p className="text-xs text-muted-foreground">Saved bills you charge to a card each cycle</p>
-        </div>
-        <button onClick={() => setAdding(true)} className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-          <Plus className="h-5 w-5" />
-        </button>
-      </div>
+      <SelectorHeader
+        icon={Receipt}
+        title="Bills"
+        pills={[{ key: 'all', label: 'All bills' }, ...GROUPS.map((g) => ({ key: g.key, label: g.short }))]}
+        selectedKey={groupFilter || 'all'}
+        onSelect={(key) => setParams(key === 'all' ? {} : { group: key })}
+        action={
+          <button onClick={() => setAdding(true)} className="h-9 w-9 rounded-full bg-white/10 text-white flex items-center justify-center">
+            <Plus className="h-5 w-5" />
+          </button>
+        }
+      />
 
       {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
 

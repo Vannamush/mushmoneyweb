@@ -3,7 +3,8 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useExpenses, useCategories } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import ExpenseEditDialog from '@/components/ExpenseEditDialog';
-import { Plus } from 'lucide-react';
+import SelectorHeader from '@/components/SelectorHeader';
+import { Plus, Tag } from 'lucide-react';
 
 export default function Section() {
   const [params] = useSearchParams();
@@ -14,6 +15,7 @@ export default function Section() {
   const { data: categories = [] } = useCategories();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(null);
+  const [selectedCat, setSelectedCat] = useState('all');
 
   const catMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.id, c])), [categories]);
   const sectionCats = useMemo(() => categories.filter((c) => names.includes(c.name)), [categories, names]);
@@ -32,18 +34,21 @@ export default function Section() {
 
   return (
     <div className="px-5 pt-6">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-semibold">{name}</h1>
-          <p className="text-xs text-muted-foreground">{formatCurrency(total)} across {sectionCats.length} categories</p>
-        </div>
-        <button
-          onClick={() => navigate('/add')}
-          className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
-      </div>
+      <SelectorHeader
+        icon={Tag}
+        title={name}
+        pills={[{ key: 'all', label: `All · ${formatCurrency(total)}` }, ...sectionCats.map((c) => ({ key: c.id, label: `${c.emoji} ${c.name}` }))]}
+        selectedKey={selectedCat}
+        onSelect={setSelectedCat}
+        action={
+          <button
+            onClick={() => navigate('/add')}
+            className="h-9 w-9 rounded-full bg-white/10 text-white flex items-center justify-center"
+          >
+            <Plus className="h-5 w-5" />
+          </button>
+        }
+      />
 
       {filtered.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border p-8 text-center">
@@ -51,7 +56,7 @@ export default function Section() {
         </div>
       ) : (
         <div className="space-y-4">
-          {sectionCats.map((cat) => {
+          {(selectedCat === 'all' ? sectionCats : sectionCats.filter((c) => c.id === selectedCat)).map((cat) => {
             const items = (byCat[cat.id] || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date));
             if (!items.length) return null;
             const catTotal = items.reduce((s, e) => s + Number(e.amount), 0);
