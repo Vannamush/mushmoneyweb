@@ -33,6 +33,7 @@ const navItems = [
   { to: '/history?category=Pharmacy %26 Medications', label: 'Pharmacy & Meds', icon: Pill, desktopOnly: true },
   { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialists', icon: Stethoscope, desktopOnly: true },
   { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness & Supplements', icon: Dumbbell, desktopOnly: true },
+  { to: '/history?category=Gym|Fitness Memberships', label: 'Gym & Fitness Memberships', icon: Dumbbell, desktopOnly: true },
   { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels', icon: Plane, desktopOnly: true },
   { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations', icon: Gift, desktopOnly: true },
   { to: '/history?category=Charitable Donations', label: 'Charitable Donations', icon: HeartHandshake, desktopOnly: true },
