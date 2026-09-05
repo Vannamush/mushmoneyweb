@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Register() {
+  const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +33,7 @@ export default function Register() {
     try {
       await base44.auth.register({ email, password });
       try {
-        await base44.auth.updateMe({ full_name: username.trim() });
+        await base44.auth.updateMe({ full_name: displayName.trim(), username: username.trim() });
       } catch (_) {}
       setShowOtp(true);
     } catch (err) {
@@ -171,6 +172,22 @@ export default function Register() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="displayName">Display name</Label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
+            <Input
+              id="displayName"
+              type="text"
+              autoComplete="name"
+              placeholder="Jane Doe"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              className="pl-10 h-12"
+              required
+            />
+          </div>
+        </div>
         <div className="space-y-2">
           <Label htmlFor="username">Username</Label>
           <div className="relative">

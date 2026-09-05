@@ -7,6 +7,10 @@
         "admin",
         "user"
       ]
+    },
+    "username": {
+      "type": "string",
+      "title": "Username"
     }
   },
   "required": [
