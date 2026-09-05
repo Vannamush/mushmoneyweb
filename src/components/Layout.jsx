@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -27,6 +27,7 @@ const navItems = [
   { to: '/bills?name=Internet', label: 'Internet', icon: Wifi, desktopOnly: true },
   { to: '/bills?name=Home Maintenance', label: 'Home Maintenance', icon: Wrench, desktopOnly: true },
   { to: '/bills?name=Rent', label: 'Rent', icon: KeyRound, desktopOnly: true },
+  { to: '/bills?name=Auto Loan', label: 'Auto Loan', icon: Banknote, desktopOnly: true },
 ];
 
 export default function Layout() {
