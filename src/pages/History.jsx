@@ -18,8 +18,9 @@ export default function History() {
   useEffect(() => {
     const name = searchParams.get('category');
     if (!name) return;
-    const match = categories.find((c) => c.name === name);
-    if (match) setCatFilter(match.id);
+    const names = name.split(',');
+    const ids = categories.filter((c) => names.includes(c.name)).map((c) => c.id);
+    if (ids.length) setCatFilter(ids.join(','));
   }, [searchParams, categories]);
 
   const months = useMemo(() => {
@@ -30,7 +31,7 @@ export default function History() {
   const filtered = useMemo(
     () =>
       expenses.filter((e) => {
-        if (catFilter !== 'all' && e.category_id !== catFilter) return false;
+        if (catFilter !== 'all' && !catFilter.split(',').includes(e.category_id)) return false;
         if (monthFilter !== 'all' && monthKey(new Date(e.date)) !== monthFilter) return false;
         return true;
       }),
