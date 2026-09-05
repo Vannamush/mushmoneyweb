@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell, TrendingUp, Plane, Gift, HeartHandshake, Scale } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell, TrendingUp, Plane, Gift, HeartHandshake, Scale, Scissors } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -14,9 +14,10 @@ const navItems = [
   { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
   { to: '/history?category=Groceries', label: 'Groceries', icon: ShoppingCart, desktopOnly: true },
   { to: '/history?category=Medical', label: 'Medical', icon: HeartPulse, desktopOnly: true },
-  { to: '/history?category=Dining Out,Coffee', label: 'Dining Out & Coffee', icon: Utensils, desktopOnly: true },
+  { to: '/history?category=Dining Out|Coffee', label: 'Dining Out & Coffee', icon: Utensils, desktopOnly: true },
   { to: '/history?category=Household Supplies', label: 'Household Supplies', icon: ShoppingBasket, desktopOnly: true },
   { to: '/history?category=Toiletries', label: 'Toiletries', icon: SprayCan, desktopOnly: true },
+  { to: '/history?category=Personal Care (Haircuts%2C Grooming)', label: 'Personal Care', icon: Scissors, desktopOnly: true },
   { to: '/history?category=Fuel', label: 'Fuel', icon: Fuel, desktopOnly: true },
   { to: '/history?category=EV Charging', label: 'EV Charging', icon: BatteryCharging, desktopOnly: true },
   { to: '/history?category=Public Transit', label: 'Public Transit', icon: Bus, desktopOnly: true },
@@ -40,10 +41,10 @@ const navItems = [
   { to: '/history?category=Charitable Donations', label: 'Charitable Donations', icon: HeartHandshake, desktopOnly: true },
   { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees', icon: Scale, desktopOnly: true },
   { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
-  { to: '/bills?name=Rent,Mortgage', label: 'Rent & Mortgage', icon: Home, desktopOnly: true },
-  { to: '/bills?name=Property Taxes,HOA Fees', label: 'Property Taxes & HOA', icon: Landmark, desktopOnly: true },
-  { to: '/bills?name=Electricity,Water,Gas,Trash', label: 'Utilities', icon: Zap, desktopOnly: true },
-  { to: '/bills?name=Internet,Home Maintenance', label: 'Internet & Home Maintenance', icon: Wifi, desktopOnly: true },
+  { to: '/bills?name=Rent|Mortgage', label: 'Rent & Mortgage', icon: Home, desktopOnly: true },
+  { to: '/bills?name=Property Taxes|HOA Fees', label: 'Property Taxes & HOA', icon: Landmark, desktopOnly: true },
+  { to: '/bills?name=Electricity|Water|Gas|Trash', label: 'Utilities', icon: Zap, desktopOnly: true },
+  { to: '/bills?name=Internet|Home Maintenance', label: 'Internet & Home Maintenance', icon: Wifi, desktopOnly: true },
   { to: '/bills?name=Auto Loan', label: 'Auto Loan', icon: Banknote, desktopOnly: true },
   { to: '/bills?name=Lease Payment', label: 'Lease Payment', icon: FileText, desktopOnly: true },
   { to: '/bills?name=Auto Insurance', label: 'Auto Insurance', icon: ShieldCheck, desktopOnly: true },

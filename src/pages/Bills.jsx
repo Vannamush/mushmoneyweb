@@ -18,7 +18,7 @@ export default function Bills() {
   const [paying, setPaying] = useState(null);
   const [error, setError] = useState('');
 
-  const visible = nameFilter ? bills.filter((b) => nameFilter.split(',').includes(b.name)) : bills;
+  const visible = nameFilter ? bills.filter((b) => nameFilter.split('|').includes(b.name)) : bills;
 
   const del = async (b) => {
     if (!confirm(`Delete "${b.name}"?`)) return;
