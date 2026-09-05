@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell, TrendingUp, Plane, Gift, HeartHandshake, Scale, Scissors } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell, TrendingUp, Plane, Gift, HeartHandshake, Scale, Scissors, ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -22,6 +22,7 @@ const navItems = [
   { to: '/history?category=Public Transit|Rideshare', label: 'Transit & Rideshare', icon: Bus, desktopOnly: true },
   { to: '/history?category=Maintenance|Parking', label: 'Maintenance & Parking', icon: Hammer, desktopOnly: true },
   { to: '/history?category=Clothing %26 Accessories', label: 'Clothing & Accessories', icon: Shirt, desktopOnly: true },
+  { to: '/history?category=Shopping|Electronics', label: 'Shopping & Electronics', icon: ShoppingBag, desktopOnly: true },
   { to: '/history?category=Entertainment', label: 'Entertainment', icon: Clapperboard, desktopOnly: true },
   { to: '/history?category=Hobbies|Recreation', label: 'Hobbies & Recreation', icon: Palette, desktopOnly: true },
   { to: '/history?category=Streaming', label: 'Streaming', icon: MonitorPlay, desktopOnly: true },
