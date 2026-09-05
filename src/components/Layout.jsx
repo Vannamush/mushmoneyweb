@@ -52,6 +52,7 @@ const navItems = [
   { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
   { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments', icon: TrendingUp, desktopOnly: true },
   { to: '/bills?name=Credit Card Payments %26 Debt Payoff', label: 'Credit Card & Debt', icon: CreditCard, desktopOnly: true },
+  { to: '/bills?name=Student Loans %26 Personal Loans', label: 'Student & Personal Loans', icon: Landmark, desktopOnly: true },
 ];
 
 export default function Layout() {
