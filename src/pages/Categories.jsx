@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,6 @@ const EMOJIS = ['🏠', '🍔', '⛽', '🎉', '🧸', '📺', '🛒', '💊', '
 export default function Categories() {
   const { data: categories = [] } = useCategories();
   const refresh = useRefresh(['categories']);
-  const navigate = useNavigate();
   const [editing, setEditing] = useState(null);
   const [adding, setAdding] = useState(false);
 
@@ -32,13 +30,6 @@ export default function Categories() {
           <Plus className="h-5 w-5" />
         </button>
       </div>
-
-      <button
-        onClick={() => navigate('/add')}
-        className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/40 text-primary py-3 mb-4 font-medium hover:bg-muted transition"
-      >
-        <Plus className="h-5 w-5" /> Add expense
-      </button>
 
       <div className="space-y-2">
         {categories.map((c) => (

@@ -1,9 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useExpenses, useCategories } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import ExpenseEditDialog from '@/components/ExpenseEditDialog';
-import { Plus } from 'lucide-react';
 
 export default function Section() {
   const [params] = useSearchParams();
@@ -12,7 +11,6 @@ export default function Section() {
   const names = catParam.split('|').filter(Boolean);
   const { data: expenses = [] } = useExpenses();
   const { data: categories = [] } = useCategories();
-  const navigate = useNavigate();
   const [editing, setEditing] = useState(null);
 
   const catMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.id, c])), [categories]);
@@ -37,12 +35,6 @@ export default function Section() {
           <h1 className="text-xl font-semibold">{name}</h1>
           <p className="text-xs text-muted-foreground">{formatCurrency(total)} across {sectionCats.length} categories</p>
         </div>
-        <button
-          onClick={() => navigate('/add')}
-          className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
       </div>
 
       {filtered.length === 0 ? (
