@@ -1,0 +1,53 @@
+import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+
+export default function GoalDialog({ goal, onClose, onSaved }) {
+  const isEdit = !!goal;
+  const [name, setName] = useState(goal?.name || '');
+  const [target, setTarget] = useState(goal?.target_amount ? String(goal.target_amount) : '');
+  const [date, setDate] = useState(goal?.target_date || '');
+  const [note, setNote] = useState(goal?.note || '');
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    if (!name.trim() || !(parseFloat(target) > 0)) return;
+    setSaving(true);
+    const payload = {
+      name: name.trim(),
+      target_amount: parseFloat(target),
+      target_date: date || null,
+      note: note.trim(),
+    };
+    try {
+      if (isEdit) await base44.entities.Goal.update(goal.id, payload);
+      else await base44.entities.Goal.create({ ...payload, saved_amount: 0 });
+      onSaved();
+    } catch (e) {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{isEdit ? 'Edit goal' : 'New savings goal'}</DialogTitle>
+        </DialogHeader>
+
+        <Input placeholder="What are you saving for? (e.g. New laptop)" value={name} onChange={(e) => setName(e.target.value)} className="h-12" autoFocus />
+        <Input type="number" inputMode="decimal" placeholder="Target amount" value={target} onChange={(e) => setTarget(e.target.value)} className="h-12" />
+        <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12" />
+        <Input placeholder="Note (optional)" value={note} onChange={(e) => setNote(e.target.value)} className="h-12" />
+
+        <DialogFooter>
+          <Button onClick={save} disabled={saving} className="w-full">
+            {saving ? 'Saving…' : 'Save goal'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

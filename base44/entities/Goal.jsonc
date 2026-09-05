@@ -1,0 +1,32 @@
+{
+  "name": "Goal",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "target_amount": {
+      "type": "number",
+      "title": "Target amount"
+    },
+    "saved_amount": {
+      "type": "number",
+      "title": "Saved amount",
+      "default": 0
+    },
+    "note": {
+      "type": "string",
+      "title": "Note"
+    },
+    "target_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Target date"
+    }
+  },
+  "required": [
+    "name",
+    "target_amount"
+  ]
+}
