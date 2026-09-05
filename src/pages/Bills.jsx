@@ -9,13 +9,14 @@ import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 
 const GROUPS = [
-  { label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
-  { label: 'Transportation (Mixed)', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
+  { key: 'housing', label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
+  { key: 'transportation', label: 'Transportation (Mixed)', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
 ];
 
 export default function Bills() {
   const [params] = useSearchParams();
   const nameFilter = params.get('name');
+  const groupFilter = params.get('group');
   const { data: bills = [] } = useBills();
   const refresh = useRefresh(['bills']);
   const [editing, setEditing] = useState(null);
@@ -23,7 +24,14 @@ export default function Bills() {
   const [paying, setPaying] = useState(null);
   const [error, setError] = useState('');
 
-  const visible = nameFilter ? bills.filter((b) => nameFilter.split('|').includes(b.name)) : bills;
+  const visible = bills.filter((b) => {
+    if (nameFilter) return nameFilter.split('|').includes(b.name);
+    if (groupFilter) {
+      const g = GROUPS.find((grp) => grp.key === groupFilter);
+      return g ? g.names.includes(b.name) : true;
+    }
+    return true;
+  });
 
   const del = async (b) => {
     if (!confirm(`Delete "${b.name}"?`)) return;

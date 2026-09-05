@@ -8,7 +8,14 @@ const navItems = [
   { to: '/history', label: 'History', icon: History },
   { to: '/categories', label: 'Tags', icon: Tag },
   { to: '/pay', label: 'Pay', icon: CreditCard },
-  { to: '/bills', label: 'Bills', icon: Receipt },
+  {
+    to: '/bills', label: 'Bills', icon: Receipt,
+    children: [
+      { to: '/bills?group=housing', label: 'Housing & Essentials' },
+      { to: '/bills?name=Car', label: 'Car' },
+      { to: '/bills?group=transportation', label: 'Transportation' },
+    ],
+  },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
   { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
 
@@ -95,7 +102,7 @@ export default function Layout() {
       return true;
     }
     if (p === '/history') return !location.search.includes('category=');
-    if (p === '/bills') return !location.search.includes('name=');
+    if (p === '/bills') return !location.search.includes('name=') && !location.search.includes('group=');
     return true;
   };
   const mobileItems = navItems.filter((i) => !i.desktopOnly);
