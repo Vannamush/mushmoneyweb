@@ -213,46 +213,34 @@ export default function Layout() {
                       {item.children.map((child) => {
                         if (child.children) {
                           const subActive = child.children.some((c) => isActive(c.to));
-                          const subKey = `${item.label}/${child.label}`;
-                          const subOpen = openGroups[subKey] ?? subActive;
                           return (
                             <div key={child.label}>
-                              <div className="flex items-center gap-1">
-                                <Link
-                                  to={groupTarget(child.label, child.children)}
-                                  className={cn(
-                                    'flex-1 flex items-center rounded-md px-3 py-2 text-sm transition',
-                                    subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                  )}
-                                >
-                                  {child.label}
-                                </Link>
-                                <button
-                                  onClick={() => setOpenGroups((s) => ({ ...s, [subKey]: !s[subKey] }))}
-                                  className="h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted transition"
-                                >
-                                  <ChevronDown className={cn('h-4 w-4 transition-transform', subOpen && 'rotate-180')} />
-                                </button>
+                              <Link
+                                to={groupTarget(child.label, child.children)}
+                                className={cn(
+                                  'flex items-center rounded-md px-3 py-2 text-sm transition',
+                                  subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                )}
+                              >
+                                {child.label}
+                              </Link>
+                              <div className="mt-0.5 ml-3 space-y-0.5 border-l border-border pl-2">
+                                {child.children.map((leaf) => {
+                                  const active = isActive(leaf.to);
+                                  return (
+                                    <Link
+                                      key={leaf.to}
+                                      to={leaf.to}
+                                      className={cn(
+                                        'flex items-center rounded-md px-3 py-2 text-sm transition',
+                                        active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                      )}
+                                    >
+                                      {leaf.label}
+                                    </Link>
+                                  );
+                                })}
                               </div>
-                              {subOpen && (
-                                <div className="mt-0.5 ml-3 space-y-0.5 border-l border-border pl-2">
-                                  {child.children.map((leaf) => {
-                                    const active = isActive(leaf.to);
-                                    return (
-                                      <Link
-                                        key={leaf.to}
-                                        to={leaf.to}
-                                        className={cn(
-                                          'flex items-center rounded-md px-3 py-2 text-sm transition',
-                                          active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                        )}
-                                      >
-                                        {leaf.label}
-                                      </Link>
-                                    );
-                                  })}
-                                </div>
-                              )}
                             </div>
                           );
                         }
