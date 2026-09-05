@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -35,6 +35,7 @@ const navItems = [
   { to: '/history?category=Dental', label: 'Dental', icon: Smile, desktopOnly: true },
   { to: '/history?category=Pharmacy %26 Medications', label: 'Pharmacy & Meds', icon: Pill, desktopOnly: true },
   { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialists', icon: Stethoscope, desktopOnly: true },
+  { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness & Supplements', icon: Dumbbell, desktopOnly: true },
   { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
   { to: '/bills?name=Mortgage', label: 'Mortgage', icon: Building2, desktopOnly: true },
   { to: '/bills?name=Property Taxes', label: 'Property Taxes', icon: Landmark, desktopOnly: true },
