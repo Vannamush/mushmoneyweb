@@ -159,13 +159,6 @@ const leafPaths = (item) => {
   return out;
 };
 
-const groupTarget = (children) => {
-  const cats = children
-    .map((c) => new URLSearchParams(c.to.split('?')[1] || '').get('category'))
-    .filter(Boolean);
-  return `/history?category=${encodeURIComponent(cats.join('|'))}`;
-};
-
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -219,32 +212,39 @@ export default function Layout() {
                       {item.children.map((child) => {
                         if (child.children) {
                           const subActive = child.children.some((c) => isActive(c.to));
+                          const subKey = `${item.label}/${child.label}`;
+                          const subOpen = openGroups[subKey] ?? subActive;
                           return (
-                            <div key={child.label} className="space-y-0.5">
-                              <Link
-                                to={groupTarget(child.children)}
+                            <div key={child.label}>
+                              <button
+                                onClick={() => setOpenGroups((s) => ({ ...s, [subKey]: !s[subKey] }))}
                                 className={cn(
-                                  'flex items-center rounded-md px-3 pt-1 pb-0.5 text-[11px] font-semibold uppercase tracking-wide transition',
-                                  subActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                                  'w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
+                                  subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                                 )}
                               >
-                                {child.label}
-                              </Link>
-                              {child.children.map((leaf) => {
-                                const active = isActive(leaf.to);
-                                return (
-                                  <Link
-                                    key={leaf.to}
-                                    to={leaf.to}
-                                    className={cn(
-                                      'flex items-center rounded-md px-3 py-2 text-sm transition',
-                                      active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                    )}
-                                  >
-                                    {leaf.label}
-                                  </Link>
-                                );
-                              })}
+                                <span className="flex-1 text-left">{child.label}</span>
+                                <ChevronDown className={cn('h-4 w-4 transition-transform', subOpen && 'rotate-180')} />
+                              </button>
+                              {subOpen && (
+                                <div className="mt-0.5 ml-3 space-y-0.5 border-l border-border pl-2">
+                                  {child.children.map((leaf) => {
+                                    const active = isActive(leaf.to);
+                                    return (
+                                      <Link
+                                        key={leaf.to}
+                                        to={leaf.to}
+                                        className={cn(
+                                          'flex items-center rounded-md px-3 py-2 text-sm transition',
+                                          active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                        )}
+                                      >
+                                        {leaf.label}
+                                      </Link>
+                                    );
+                                  })}
+                                </div>
+                              )}
                             </div>
                           );
                         }
