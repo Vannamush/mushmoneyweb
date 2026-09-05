@@ -29,9 +29,7 @@ const navItems = [
   { to: '/bills?name=Internet|Home Maintenance', label: 'Internet & Home Maintenance', icon: Wifi, desktopOnly: true },
   { to: '/bills?name=Auto Loan|Lease Payment|Auto Insurance', label: 'Auto Loan & Insurance', icon: Banknote, desktopOnly: true },
   { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
-  { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments', icon: TrendingUp, desktopOnly: true },
-  { to: '/bills?name=Credit Card Payments %26 Debt Payoff', label: 'Credit Card & Debt', icon: CreditCard, desktopOnly: true },
-  { to: '/bills?name=Student Loans|Personal Loans|Student Loans %26 Personal Loans', label: 'Student & Personal Loans', icon: GraduationCap, desktopOnly: true },
+  { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments|Credit Card Payments %26 Debt Payoff|Student Loans|Personal Loans', label: 'Financial Goals & Obligations', icon: TrendingUp, desktopOnly: true },
 ];
 
 export default function Layout() {
