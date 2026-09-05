@@ -8,6 +8,10 @@ import { Trash2, Pencil, Plus, CreditCard, Home } from 'lucide-react';
 import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 
+const GROUPS = [
+  { label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet'] },
+];
+
 export default function Bills() {
   const [params] = useSearchParams();
   const nameFilter = params.get('name');
@@ -67,36 +71,71 @@ export default function Bills() {
 
       {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         {visible.length === 0 && (
           <div className="rounded-2xl border border-dashed border-border p-8 text-center">
             <Home className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">No bills yet. Add your mortgage or any recurring bill to charge it to a card.</p>
           </div>
         )}
-        {visible.map((b) => (
-          <div key={b.id} className="rounded-2xl bg-card border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">{b.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {formatCurrency(b.amount)} / {b.interval === 'year' ? 'year' : 'month'}
-                  {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
-                </p>
+        {(() => {
+          const grouped = {};
+          const other = [];
+          visible.forEach((b) => {
+            const g = GROUPS.find((grp) => grp.names.includes(b.name));
+            if (g) (grouped[g.label] = grouped[g.label] || []).push(b);
+            else other.push(b);
+          });
+          const renderBill = (b) => (
+            <div key={b.id} className="rounded-2xl bg-card border border-border p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium truncate">{b.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {formatCurrency(b.amount)} / {b.interval === 'year' ? 'year' : 'month'}
+                    {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
+                  </p>
+                </div>
+                <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+                  <Pencil className="h-4 w-4 text-muted-foreground" />
+                </button>
+                <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+                  <Trash2 className="h-4 w-4 text-red-500" />
+                </button>
               </div>
-              <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
-                <Pencil className="h-4 w-4 text-muted-foreground" />
-              </button>
-              <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
-                <Trash2 className="h-4 w-4 text-red-500" />
-              </button>
+              <Button onClick={() => pay(b)} disabled={paying === b.id} className="w-full mt-3" size="sm">
+                <CreditCard className="h-4 w-4" />
+                {paying === b.id ? 'Opening checkout…' : `Pay ${formatCurrency(b.amount)} by card`}
+              </Button>
             </div>
-            <Button onClick={() => pay(b)} disabled={paying === b.id} className="w-full mt-3" size="sm">
-              <CreditCard className="h-4 w-4" />
-              {paying === b.id ? 'Opening checkout…' : `Pay ${formatCurrency(b.amount)} by card`}
-            </Button>
-          </div>
-        ))}
+          );
+          return (
+            <>
+              {GROUPS.map((g) => {
+                const items = grouped[g.label] || [];
+                if (!items.length) return null;
+                const total = items.reduce((s, b) => s + Number(b.amount), 0);
+                return (
+                  <div key={g.label}>
+                    <div className="flex items-center justify-between px-1 mb-2">
+                      <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{g.label}</h2>
+                      <span className="text-xs text-muted-foreground">{formatCurrency(total)}</span>
+                    </div>
+                    <div className="space-y-2">{items.map(renderBill)}</div>
+                  </div>
+                );
+              })}
+              {other.length > 0 && (
+                <div>
+                  {GROUPS.some((g) => grouped[g.label]) && (
+                    <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-1 mb-2">Other bills</h2>
+                  )}
+                  <div className="space-y-2">{other.map(renderBill)}</div>
+                </div>
+              )}
+            </>
+          );
+        })()}
       </div>
 
       {(adding || editing) && (
