@@ -14,7 +14,6 @@ import AddExpense from '@/pages/AddExpense';
 import AddIncome from '@/pages/AddIncome';
 import History from '@/pages/History';
 import Import from '@/pages/Import';
-import Months from '@/pages/Months';
 import Categories from '@/pages/Categories';
 import Settings from '@/pages/Settings';
 import Pay from '@/pages/Pay';
@@ -67,7 +66,6 @@ const AuthenticatedApp = () => {
           <Route path="/add-income" element={<AddIncome />} />
           <Route path="/history" element={<History />} />
           <Route path="/import" element={<Import />} />
-          <Route path="/months" element={<Months />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/pay" element={<Pay />} />
