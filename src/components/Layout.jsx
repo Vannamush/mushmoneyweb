@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -50,6 +50,7 @@ const navItems = [
   { to: '/bills?name=Lease Payment', label: 'Lease Payment', icon: FileText, desktopOnly: true },
   { to: '/bills?name=Auto Insurance', label: 'Auto Insurance', icon: ShieldCheck, desktopOnly: true },
   { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
+  { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments', icon: TrendingUp, desktopOnly: true },
 ];
 
 export default function Layout() {
