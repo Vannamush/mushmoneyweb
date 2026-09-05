@@ -16,73 +16,142 @@ const navItems = [
       { to: '/bills?group=transportation', label: 'Transportation' },
     ],
   },
-
   {
     label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
     children: [
-      { to: '/history?category=Groceries', label: 'Groceries' },
-      { to: '/history?category=Dining Out', label: 'Dining Out' },
-      { to: '/history?category=Coffee', label: 'Coffee' },
-      { to: '/history?category=Household Supplies', label: 'Household Supplies' },
-      { to: '/history?category=Toiletries', label: 'Toiletries' },
-      { to: '/history?category=Personal Care (Haircuts%2C Grooming)', label: 'Personal Care' },
+      {
+        label: 'Food & Drink',
+        children: [
+          { to: '/history?category=Groceries', label: 'Groceries' },
+          { to: '/history?category=Dining Out', label: 'Dining Out' },
+          { to: '/history?category=Coffee', label: 'Coffee' },
+        ],
+      },
+      {
+        label: 'Household & Care',
+        children: [
+          { to: '/history?category=Household Supplies', label: 'Household Supplies' },
+          { to: '/history?category=Toiletries', label: 'Toiletries' },
+          { to: '/history?category=Personal Care (Haircuts%2C Grooming)', label: 'Personal Care' },
+        ],
+      },
     ],
   },
   {
     label: 'Transportation', icon: Car, desktopOnly: true,
     children: [
-      { to: '/history?category=Car', label: 'Car' },
-      { to: '/history?category=Fuel', label: 'Fuel' },
-      { to: '/history?category=EV Charging', label: 'EV Charging' },
-      { to: '/history?category=Public Transit', label: 'Public Transit' },
-      { to: '/history?category=Rideshare', label: 'Rideshare' },
-      { to: '/history?category=Maintenance', label: 'Maintenance' },
-      { to: '/history?category=Parking', label: 'Parking' },
+      {
+        label: 'Vehicle',
+        children: [
+          { to: '/history?category=Car', label: 'Car' },
+          { to: '/history?category=Fuel', label: 'Fuel' },
+          { to: '/history?category=EV Charging', label: 'EV Charging' },
+          { to: '/history?category=Maintenance', label: 'Maintenance' },
+        ],
+      },
+      {
+        label: 'Transit & Rides',
+        children: [
+          { to: '/history?category=Public Transit', label: 'Public Transit' },
+          { to: '/history?category=Rideshare', label: 'Rideshare' },
+          { to: '/history?category=Parking', label: 'Parking' },
+        ],
+      },
     ],
   },
   {
     label: 'Lifestyle & Personal', icon: ShoppingBag, desktopOnly: true,
     children: [
-      { to: '/history?category=Clothing %26 Accessories', label: 'Clothing & Accessories' },
-      { to: '/history?category=Entertainment', label: 'Entertainment' },
-      { to: '/history?category=Hobbies', label: 'Hobbies' },
-      { to: '/history?category=Recreation', label: 'Recreation' },
-      { to: '/history?category=Shopping', label: 'Shopping' },
-      { to: '/history?category=Electronics', label: 'Electronics' },
+      {
+        label: 'Shopping',
+        children: [
+          { to: '/history?category=Clothing %26 Accessories', label: 'Clothing & Accessories' },
+          { to: '/history?category=Shopping', label: 'Shopping' },
+          { to: '/history?category=Electronics', label: 'Electronics' },
+        ],
+      },
+      {
+        label: 'Leisure',
+        children: [
+          { to: '/history?category=Entertainment', label: 'Entertainment' },
+          { to: '/history?category=Hobbies', label: 'Hobbies' },
+          { to: '/history?category=Recreation', label: 'Recreation' },
+        ],
+      },
     ],
   },
   {
     label: 'Subscriptions & Digital', icon: MonitorPlay, desktopOnly: true,
     children: [
-      { to: '/history?category=Streaming', label: 'Streaming' },
-      { to: '/history?category=Software %26 Cloud Storage', label: 'Software & Cloud Storage' },
-      { to: '/history?category=Gym', label: 'Gym' },
-      { to: '/history?category=Fitness Memberships', label: 'Fitness Memberships' },
-      { to: '/history?category=News', label: 'News' },
-      { to: '/history?category=Magazines', label: 'Magazines' },
-      { to: '/history?category=Magazine Subscriptions', label: 'Magazine Subscriptions' },
+      {
+        label: 'Media & News',
+        children: [
+          { to: '/history?category=Streaming', label: 'Streaming' },
+          { to: '/history?category=News', label: 'News' },
+          { to: '/history?category=Magazines', label: 'Magazines' },
+          { to: '/history?category=Magazine Subscriptions', label: 'Magazine Subscriptions' },
+        ],
+      },
+      {
+        label: 'Software & Fitness',
+        children: [
+          { to: '/history?category=Software %26 Cloud Storage', label: 'Software & Cloud Storage' },
+          { to: '/history?category=Gym', label: 'Gym' },
+          { to: '/history?category=Fitness Memberships', label: 'Fitness Memberships' },
+        ],
+      },
     ],
   },
   {
     label: 'Health & Wellness', icon: Activity, desktopOnly: true,
     children: [
-      { to: '/history?category=Health', label: 'Health' },
-      { to: '/history?category=Dental', label: 'Dental' },
-      { to: '/history?category=Medical|Pharmacy %26 Medications', label: 'Pharmacy & Medications' },
-      { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialist Visits' },
-      { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness Equipment & Supplements' },
+      {
+        label: 'Medical & Dental',
+        children: [
+          { to: '/history?category=Health', label: 'Health' },
+          { to: '/history?category=Dental', label: 'Dental' },
+          { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialist Visits' },
+        ],
+      },
+      {
+        label: 'Pharmacy & Fitness',
+        children: [
+          { to: '/history?category=Medical|Pharmacy %26 Medications', label: 'Pharmacy & Medications' },
+          { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness Equipment & Supplements' },
+        ],
+      },
     ],
   },
   {
     label: 'Life Events, Giving & Misc', icon: Gift, desktopOnly: true,
     children: [
-      { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels' },
-      { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations' },
-      { to: '/history?category=Charitable Donations', label: 'Charitable Donations' },
-      { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees' },
+      {
+        label: 'Travel & Celebrations',
+        children: [
+          { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels' },
+          { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations' },
+        ],
+      },
+      {
+        label: 'Giving & Obligations',
+        children: [
+          { to: '/history?category=Charitable Donations', label: 'Charitable Donations' },
+          { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees' },
+        ],
+      },
     ],
   },
 ];
+
+const leafPaths = (item) => {
+  const out = [];
+  const walk = (nodes) => nodes.forEach((n) => {
+    if (n.to) out.push(n.to);
+    else if (n.children) walk(n.children);
+  });
+  if (item.children) walk(item.children);
+  return out;
+};
 
 export default function Layout() {
   const location = useLocation();
@@ -117,7 +186,7 @@ export default function Layout() {
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             if (item.children) {
-              const parentActive = item.children.some((c) => isActive(c.to));
+              const parentActive = leafPaths(item).some(isActive);
               const open = openGroups[item.label] ?? parentActive;
               return (
                 <div key={item.label}>
@@ -133,8 +202,33 @@ export default function Layout() {
                     <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
                   </button>
                   {open && (
-                    <div className="mt-1 ml-5 space-y-0.5 border-l border-border pl-3">
+                    <div className="mt-1 ml-5 space-y-1 border-l border-border pl-3">
                       {item.children.map((child) => {
+                        if (child.children) {
+                          const subActive = child.children.some((c) => isActive(c.to));
+                          return (
+                            <div key={child.label} className="space-y-0.5">
+                              <p className={cn('px-3 pt-1 pb-0.5 text-[11px] font-semibold uppercase tracking-wide', subActive ? 'text-foreground' : 'text-muted-foreground')}>
+                                {child.label}
+                              </p>
+                              {child.children.map((leaf) => {
+                                const active = isActive(leaf.to);
+                                return (
+                                  <Link
+                                    key={leaf.to}
+                                    to={leaf.to}
+                                    className={cn(
+                                      'flex items-center rounded-md px-3 py-2 text-sm transition',
+                                      active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                    )}
+                                  >
+                                    {leaf.label}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          );
+                        }
                         const active = isActive(child.to);
                         return (
                           <Link
