@@ -41,12 +41,17 @@ const navItems = [
     label: 'Transportation', icon: Car, desktopOnly: true,
     children: [
       {
-        label: 'Car',
+        label: 'Vehicle',
         children: [
           { to: '/history?category=Car', label: 'Car' },
           { to: '/history?category=Fuel', label: 'Fuel' },
           { to: '/history?category=EV Charging', label: 'EV Charging' },
           { to: '/history?category=Maintenance', label: 'Maintenance' },
+        ],
+      },
+      {
+        label: 'Transit & Rides',
+        children: [
           { to: '/history?category=Public Transit', label: 'Public Transit' },
           { to: '/history?category=Rideshare', label: 'Rideshare' },
           { to: '/history?category=Parking', label: 'Parking' },
