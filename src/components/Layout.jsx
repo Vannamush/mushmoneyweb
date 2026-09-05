@@ -9,7 +9,7 @@ const navItems = [
   {
     to: '/categories', label: 'Tags', icon: Tag,
     children: [
-      { to: '/add', label: 'Add expense' },
+      { to: '/add', label: 'Add expense', icon: Plus, primary: true },
       { to: '/categories', label: 'Manage tags' },
     ],
   },
@@ -254,10 +254,15 @@ export default function Layout() {
                             key={child.to}
                             to={child.to}
                             className={cn(
-                              'flex items-center rounded-md px-3 py-2 text-sm transition',
-                              active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                              'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
+                              child.primary
+                                ? 'bg-primary text-primary-foreground font-medium hover:bg-primary/90'
+                                : active
+                                  ? 'bg-primary text-primary-foreground font-medium'
+                                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                             )}
                           >
+                            {child.icon && <child.icon className="h-4 w-4" />}
                             {child.label}
                           </Link>
                         );
@@ -283,14 +288,6 @@ export default function Layout() {
             );
           })}
         </nav>
-        <div className="p-3 border-t border-border">
-          <button
-            onClick={() => navigate('/add')}
-            className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground h-11 font-medium hover:bg-primary/90 transition"
-          >
-            <Plus className="h-5 w-5" strokeWidth={2.5} /> Add expense
-          </button>
-        </div>
       </aside>
 
       <div className="lg:pl-64">
