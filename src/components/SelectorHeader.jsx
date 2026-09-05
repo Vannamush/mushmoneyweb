@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function SelectorHeader({ icon: Icon, title, pills = [], selectedKey, onSelect, action }) {
+export default function SelectorHeader({ icon: Icon, title, pills = [], selectedKey, onSelect, action, children }) {
   const [open, setOpen] = useState(true);
   return (
     <div className="bg-[#15171e] rounded-2xl mb-4 overflow-hidden">
@@ -36,6 +36,7 @@ export default function SelectorHeader({ icon: Icon, title, pills = [], selected
           ))}
         </div>
       )}
+      {open && children && <div className="border-t border-[#1b2336]">{children}</div>}
     </div>
   );
 }

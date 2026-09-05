@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Trash2, Pencil, Plus, CreditCard, Home, Receipt } from 'lucide-react';
+import { Plus, Receipt } from 'lucide-react';
 import { useBills, useRefresh } from '@/lib/api';
-import { formatCurrency } from '@/lib/money';
 import SelectorHeader from '@/components/SelectorHeader';
+import BillRow from '@/components/BillRow';
 
 const GROUPS = [
-  { key: 'housing', label: 'Housing & Essential Utilities (Fixed/Needs)', short: 'Housing & Essentials', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
-  { key: 'transportation', label: 'Transportation (Mixed)', short: 'Transportation', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
+  { key: 'housing', short: 'Housing & Essentials', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
+  { key: 'transportation', short: 'Transportation', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
 ];
 
 export default function Bills() {
-  const [params, setParams] = useSearchParams();
-  const nameFilter = params.get('name');
+  const [params] = useSearchParams();
   const groupFilter = params.get('group');
   const { data: bills = [] } = useBills();
   const refresh = useRefresh(['bills']);
@@ -25,14 +24,16 @@ export default function Bills() {
   const [paying, setPaying] = useState(null);
   const [error, setError] = useState('');
 
-  const visible = bills.filter((b) => {
-    if (nameFilter) return nameFilter.split('|').includes(b.name);
-    if (groupFilter) {
-      const g = GROUPS.find((grp) => grp.key === groupFilter);
-      return g ? g.names.includes(b.name) : true;
-    }
-    return true;
-  });
+  const { grouped, other } = useMemo(() => {
+    const map = {};
+    const other = [];
+    bills.forEach((b) => {
+      const g = GROUPS.find((grp) => grp.names.includes(b.name));
+      if (g) (map[g.key] = map[g.key] || []).push(b);
+      else other.push(b);
+    });
+    return { grouped: map, other };
+  }, [bills]);
 
   const del = async (b) => {
     if (!confirm(`Delete "${b.name}"?`)) return;
@@ -67,81 +68,33 @@ export default function Bills() {
     setPaying(null);
   };
 
+  const groupsToShow = groupFilter ? GROUPS.filter((g) => g.key === groupFilter) : GROUPS;
+
+  const renderGroup = (key, title, items) => (
+    <SelectorHeader key={key} icon={Receipt} title={title}>
+      {items.length === 0 ? (
+        <div className="px-4 py-8 text-center text-sm text-[#7a7c81]">No bills here yet.</div>
+      ) : (
+        items.map((b, i) => (
+          <BillRow key={b.id} bill={b} index={i} paying={paying} onPay={pay} onEdit={setEditing} onDelete={del} />
+        ))
+      )}
+    </SelectorHeader>
+  );
+
   return (
     <div className="px-5 pt-6 pb-10 min-h-screen bg-[#0c111d] text-white">
-      <SelectorHeader
-        icon={Receipt}
-        title="Bills"
-        pills={GROUPS.map((g) => ({ key: g.key, label: g.short }))}
-        selectedKey={groupFilter || 'all'}
-        onSelect={(key) => setParams(key === 'all' ? {} : { group: key })}
-        action={
-          <button onClick={() => setAdding(true)} className="h-9 w-9 rounded-full bg-[#22252d] text-white flex items-center justify-center">
-            <Plus className="h-5 w-5" />
-          </button>
-        }
-      />
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-semibold text-white">Bills</h1>
+        <button onClick={() => setAdding(true)} className="h-10 w-10 rounded-full bg-[#22252d] text-white flex items-center justify-center">
+          <Plus className="h-5 w-5" />
+        </button>
+      </div>
 
       {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
 
-      <div className="space-y-4">
-        {visible.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-[#1b2336] p-8 text-center">
-            <Home className="h-8 w-8 text-[#9ca3af] mx-auto mb-2" />
-            <p className="text-sm text-[#9ca3af]">No bills yet. Add your mortgage or any recurring bill to track it here.</p>
-          </div>
-        )}
-        {(() => {
-          const grouped = {};
-          const other = [];
-          visible.forEach((b) => {
-            const g = GROUPS.find((grp) => grp.names.includes(b.name));
-            if (g) (grouped[g.label] = grouped[g.label] || []).push(b);
-            else other.push(b);
-          });
-          const renderGroup = (label, items) => {
-            if (!items.length) return null;
-            const total = items.reduce((s, b) => s + Number(b.amount), 0);
-            return (
-              <div key={label} className="rounded-2xl bg-[#161e2e] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-[#1b2336]">
-                  <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{label}</h2>
-                  <span className="text-xs text-[#9ca3af]">{formatCurrency(total)}</span>
-                </div>
-                <div>
-                  {items.map((b, i) => (
-                    <div key={b.id} className={`px-4 py-3 flex items-center gap-3 ${i > 0 ? 'border-t border-[#1b2336]' : ''}`}>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate text-white">{b.name}</p>
-                        <p className="text-sm text-[#9ca3af]">
-                          {formatCurrency(b.amount)} / {b.interval === 'year' ? 'year' : 'month'}
-                          {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
-                        </p>
-                      </div>
-                      <button onClick={() => pay(b)} disabled={paying === b.id} className="h-9 px-3 rounded-full bg-white text-[#0c111d] text-xs font-medium flex items-center gap-1.5 shrink-0 disabled:opacity-60">
-                        <CreditCard className="h-3.5 w-3.5" />
-                        {paying === b.id ? '…' : 'Pay'}
-                      </button>
-                      <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
-                        <Pencil className="h-4 w-4 text-[#9ca3af]" />
-                      </button>
-                      <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
-                        <Trash2 className="h-4 w-4 text-[#ef4444]" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          };
-          return (
-            <>
-              {GROUPS.map((g) => renderGroup(g.label, grouped[g.label] || []))}
-              {renderGroup('Other bills', other)}
-            </>
-          );
-        })()}
-      </div>
+      {groupsToShow.map((g) => renderGroup(g.key, g.short, grouped[g.key] || []))}
+      {!groupFilter && renderGroup('other', 'Other bills', other)}
 
       {(adding || editing) && (
         <BillDialog bill={editing} onClose={() => { setAdding(false); setEditing(null); }} onSaved={() => { setAdding(false); setEditing(null); refresh(); }} />
