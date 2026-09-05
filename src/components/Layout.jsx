@@ -213,34 +213,16 @@ export default function Layout() {
                         if (child.children) {
                           const subActive = child.children.some((c) => isActive(c.to));
                           return (
-                            <div key={child.label}>
-                              <Link
-                                to={groupTarget(child.label, child.children)}
-                                className={cn(
-                                  'flex items-center rounded-md px-3 py-2 text-sm transition',
-                                  subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                )}
-                              >
-                                {child.label}
-                              </Link>
-                              <div className="mt-0.5 ml-3 space-y-0.5 border-l border-border pl-2">
-                                {child.children.map((leaf) => {
-                                  const active = isActive(leaf.to);
-                                  return (
-                                    <Link
-                                      key={leaf.to}
-                                      to={leaf.to}
-                                      className={cn(
-                                        'flex items-center rounded-md px-3 py-2 text-sm transition',
-                                        active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                      )}
-                                    >
-                                      {leaf.label}
-                                    </Link>
-                                  );
-                                })}
-                              </div>
-                            </div>
+                            <Link
+                              key={child.label}
+                              to={groupTarget(child.label, child.children)}
+                              className={cn(
+                                'flex items-center rounded-md px-3 py-2 text-sm transition',
+                                subActive ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                              )}
+                            >
+                              {child.label}
+                            </Link>
                           );
                         }
                         const active = isActive(child.to);
@@ -250,11 +232,9 @@ export default function Layout() {
                             to={child.to}
                             className={cn(
                               'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
-                              child.primary
-                                ? 'bg-primary text-primary-foreground font-medium hover:bg-primary/90'
-                                : active
-                                  ? 'bg-primary text-primary-foreground font-medium'
-                                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                              active
+                                ? 'bg-primary text-primary-foreground font-medium'
+                                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                             )}
                           >
                             {child.icon && <child.icon className="h-4 w-4" />}
