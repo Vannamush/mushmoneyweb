@@ -17,10 +17,7 @@ const navItems = [
   { to: '/history?category=Fuel|EV Charging|Public Transit|Rideshare|Maintenance|Parking', label: 'Transportation', icon: Car, desktopOnly: true },
   { to: '/history?category=Clothing %26 Accessories|Entertainment|Hobbies|Recreation|Shopping|Electronics', label: 'Lifestyle & Personal', icon: ShoppingBag, desktopOnly: true },
   { to: '/history?category=Streaming|Software %26 Cloud Storage|Gym|Fitness Memberships|News|Magazines|Magazine Subscriptions', label: 'Subscriptions & Digital', icon: MonitorPlay, desktopOnly: true },
-  { to: '/history?category=Health|Dental', label: 'Health & Dental', icon: Activity, desktopOnly: true },
-  { to: '/history?category=Pharmacy %26 Medications', label: 'Pharmacy & Meds', icon: Pill, desktopOnly: true },
-  { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialists', icon: Stethoscope, desktopOnly: true },
-  { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness & Supplements', icon: Dumbbell, desktopOnly: true },
+  { to: '/history?category=Health|Dental|Pharmacy %26 Medications|Doctor %26 Specialist Visits|Fitness Equipment %26 Supplements', label: 'Health & Wellness', icon: Activity, desktopOnly: true },
 
   { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels', icon: Plane, desktopOnly: true },
   { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations', icon: Gift, desktopOnly: true },
