@@ -76,7 +76,7 @@ export default function Bills() {
         selectedKey={groupFilter || 'all'}
         onSelect={(key) => setParams(key === 'all' ? {} : { group: key })}
         action={
-          <button onClick={() => setAdding(true)} className="h-9 w-9 rounded-full bg-white/10 text-white flex items-center justify-center">
+          <button onClick={() => setAdding(true)} className="h-9 w-9 rounded-full bg-[#22252d] text-white flex items-center justify-center">
             <Plus className="h-5 w-5" />
           </button>
         }

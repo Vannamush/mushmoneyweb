@@ -39,7 +39,7 @@ export default function Section() {
         action={
           <button
             onClick={() => navigate('/add')}
-            className="h-9 w-9 rounded-full bg-white/10 text-white flex items-center justify-center"
+            className="h-9 w-9 rounded-full bg-[#22252d] text-white flex items-center justify-center"
           >
             <Plus className="h-5 w-5" />
           </button>
