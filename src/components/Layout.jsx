@@ -159,6 +159,13 @@ const leafPaths = (item) => {
   return out;
 };
 
+const groupTarget = (children) => {
+  const cats = children
+    .map((c) => new URLSearchParams(c.to.split('?')[1] || '').get('category'))
+    .filter(Boolean);
+  return `/history?category=${encodeURIComponent(cats.join('|'))}`;
+};
+
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -214,9 +221,15 @@ export default function Layout() {
                           const subActive = child.children.some((c) => isActive(c.to));
                           return (
                             <div key={child.label} className="space-y-0.5">
-                              <p className={cn('px-3 pt-1 pb-0.5 text-[11px] font-semibold uppercase tracking-wide', subActive ? 'text-foreground' : 'text-muted-foreground')}>
+                              <Link
+                                to={groupTarget(child.children)}
+                                className={cn(
+                                  'flex items-center rounded-md px-3 pt-1 pb-0.5 text-[11px] font-semibold uppercase tracking-wide transition',
+                                  subActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                                )}
+                              >
                                 {child.label}
-                              </p>
+                              </Link>
                               {child.children.map((leaf) => {
                                 const active = isActive(leaf.to);
                                 return (
