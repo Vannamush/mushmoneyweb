@@ -16,7 +16,6 @@ const navItems = [
     ],
   },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
-  { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
 
   {
     label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
@@ -32,6 +31,7 @@ const navItems = [
   {
     label: 'Transportation', icon: Car, desktopOnly: true,
     children: [
+      { to: '/history?category=Car', label: 'Car' },
       { to: '/history?category=Fuel', label: 'Fuel' },
       { to: '/history?category=EV Charging', label: 'EV Charging' },
       { to: '/history?category=Public Transit', label: 'Public Transit' },
