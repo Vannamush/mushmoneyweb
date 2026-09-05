@@ -28,14 +28,12 @@ export default function Section() {
     return map;
   }, [filtered]);
 
-  const total = filtered.reduce((s, e) => s + Number(e.amount), 0);
-
   return (
     <div className="px-5 pt-6 pb-10 min-h-screen bg-[#0c111d] text-white">
       <SelectorHeader
         icon={Tag}
         title={name}
-        pills={[{ key: 'all', label: `All · ${formatCurrency(total)}` }, ...sectionCats.map((c) => ({ key: c.id, label: `${c.emoji} ${c.name}` }))]}
+        pills={[{ key: 'all', label: 'All' }, ...sectionCats.map((c) => ({ key: c.id, label: c.name }))]}
         selectedKey={selectedCat}
         onSelect={setSelectedCat}
         action={
