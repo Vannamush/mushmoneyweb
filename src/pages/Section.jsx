@@ -61,27 +61,25 @@ export default function Section() {
             if (!items.length) return null;
             const catTotal = items.reduce((s, e) => s + Number(e.amount), 0);
             return (
-              <div key={cat.id}>
-                <div className="flex items-center justify-between px-1 mb-2">
+              <div key={cat.id} className="rounded-2xl bg-[#161e2e] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[#1b2336]">
                   <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{cat.emoji} {cat.name}</h2>
                   <span className="text-xs text-[#9ca3af]">{formatCurrency(catTotal)}</span>
                 </div>
-                <div className="space-y-2">
-                  {items.map((e) => (
+                <div>
+                  {items.map((e, i) => (
                     <button
                       key={e.id}
                       onClick={() => setEditing(e)}
-                      className="w-full text-left rounded-2xl bg-[#161e2e] p-4"
+                      className={`w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-[#1b2336] transition ${i > 0 ? 'border-t border-[#1b2336]' : ''}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate text-white">{e.note || cat.name}</p>
-                          <p className="text-sm text-[#9ca3af]">
-                            {new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                          </p>
-                        </div>
-                        <span className="font-semibold text-white">{formatCurrency(e.amount)}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate text-white">{e.note || cat.name}</p>
+                        <p className="text-sm text-[#9ca3af]">
+                          {new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </p>
                       </div>
+                      <span className="font-semibold text-white">{formatCurrency(e.amount)}</span>
                     </button>
                   ))}
                 </div>
