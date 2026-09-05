@@ -12,7 +12,6 @@ const navItems = [
     to: '/bills', label: 'Bills', icon: Receipt,
     children: [
       { to: '/bills?group=housing', label: 'Housing & Essentials' },
-      { to: '/bills?name=Car', label: 'Car' },
       { to: '/bills?group=transportation', label: 'Transportation' },
     ],
   },
