@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -23,6 +23,7 @@ const navItems = [
   { to: '/history?category=Public Transit', label: 'Public Transit', icon: Bus, desktopOnly: true },
   { to: '/history?category=Rideshare', label: 'Rideshare', icon: CarFront, desktopOnly: true },
   { to: '/history?category=Maintenance', label: 'Maintenance', icon: Hammer, desktopOnly: true },
+  { to: '/history?category=Parking', label: 'Parking', icon: CircleParking, desktopOnly: true },
   { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
   { to: '/bills?name=Mortgage', label: 'Mortgage', icon: Building2, desktopOnly: true },
   { to: '/bills?name=Property Taxes', label: 'Property Taxes', icon: Landmark, desktopOnly: true },
