@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette, Trees, MonitorPlay, Cloud, Newspaper, Activity, Smile, Eye, Pill, Stethoscope, Dumbbell, TrendingUp, Plane, Gift, HeartHandshake, Scale, Scissors, ShoppingBag } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, HeartPulse, Landmark, Zap, Wifi, Banknote, ShoppingBasket, PiggyBank, MonitorPlay, Activity, Eye, TrendingUp, ShoppingBag, Gift, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -13,25 +13,91 @@ const navItems = [
   { to: '/savings', label: 'Savings', icon: PiggyBank },
   { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
   { to: '/history?category=Medical', label: 'Medical', icon: HeartPulse, desktopOnly: true },
-  { to: '/history?category=Groceries|Dining Out|Coffee|Household Supplies|Toiletries|Personal Care (Haircuts%2C Grooming)', label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true },
-  { to: '/history?category=Fuel|EV Charging|Public Transit|Rideshare|Maintenance|Parking', label: 'Transportation', icon: Car, desktopOnly: true },
-  { to: '/history?category=Clothing %26 Accessories|Entertainment|Hobbies|Recreation|Shopping|Electronics', label: 'Lifestyle & Personal', icon: ShoppingBag, desktopOnly: true },
-  { to: '/history?category=Streaming|Software %26 Cloud Storage|Gym|Fitness Memberships|News|Magazines|Magazine Subscriptions', label: 'Subscriptions & Digital', icon: MonitorPlay, desktopOnly: true },
-  { to: '/history?category=Health|Dental|Pharmacy %26 Medications|Doctor %26 Specialist Visits|Fitness Equipment %26 Supplements', label: 'Health & Wellness', icon: Activity, desktopOnly: true },
-
-  { to: '/history?category=Travel%2C Flights%2C %26 Hotels|Gifts %26 Celebrations|Charitable Donations|Taxes %26 Legal Fees', label: 'Life Events, Giving & Misc', icon: Gift, desktopOnly: true },
+  {
+    label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
+    children: [
+      { to: '/history?category=Groceries', label: 'Groceries' },
+      { to: '/history?category=Dining Out', label: 'Dining Out' },
+      { to: '/history?category=Coffee', label: 'Coffee' },
+      { to: '/history?category=Household Supplies', label: 'Household Supplies' },
+      { to: '/history?category=Toiletries', label: 'Toiletries' },
+      { to: '/history?category=Personal Care (Haircuts%2C Grooming)', label: 'Personal Care' },
+    ],
+  },
+  {
+    label: 'Transportation', icon: Car, desktopOnly: true,
+    children: [
+      { to: '/history?category=Fuel', label: 'Fuel' },
+      { to: '/history?category=EV Charging', label: 'EV Charging' },
+      { to: '/history?category=Public Transit', label: 'Public Transit' },
+      { to: '/history?category=Rideshare', label: 'Rideshare' },
+      { to: '/history?category=Maintenance', label: 'Maintenance' },
+      { to: '/history?category=Parking', label: 'Parking' },
+    ],
+  },
+  {
+    label: 'Lifestyle & Personal', icon: ShoppingBag, desktopOnly: true,
+    children: [
+      { to: '/history?category=Clothing %26 Accessories', label: 'Clothing & Accessories' },
+      { to: '/history?category=Entertainment', label: 'Entertainment' },
+      { to: '/history?category=Hobbies', label: 'Hobbies' },
+      { to: '/history?category=Recreation', label: 'Recreation' },
+      { to: '/history?category=Shopping', label: 'Shopping' },
+      { to: '/history?category=Electronics', label: 'Electronics' },
+    ],
+  },
+  {
+    label: 'Subscriptions & Digital', icon: MonitorPlay, desktopOnly: true,
+    children: [
+      { to: '/history?category=Streaming', label: 'Streaming' },
+      { to: '/history?category=Software %26 Cloud Storage', label: 'Software & Cloud Storage' },
+      { to: '/history?category=Gym', label: 'Gym' },
+      { to: '/history?category=Fitness Memberships', label: 'Fitness Memberships' },
+      { to: '/history?category=News', label: 'News' },
+      { to: '/history?category=Magazines', label: 'Magazines' },
+      { to: '/history?category=Magazine Subscriptions', label: 'Magazine Subscriptions' },
+    ],
+  },
+  {
+    label: 'Health & Wellness', icon: Activity, desktopOnly: true,
+    children: [
+      { to: '/history?category=Health', label: 'Health' },
+      { to: '/history?category=Dental', label: 'Dental' },
+      { to: '/history?category=Pharmacy %26 Medications', label: 'Pharmacy & Medications' },
+      { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialist Visits' },
+      { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness Equipment & Supplements' },
+    ],
+  },
+  {
+    label: 'Life Events, Giving & Misc', icon: Gift, desktopOnly: true,
+    children: [
+      { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels' },
+      { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations' },
+      { to: '/history?category=Charitable Donations', label: 'Charitable Donations' },
+      { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees' },
+    ],
+  },
   { to: '/bills?name=Rent|Mortgage', label: 'Rent & Mortgage', icon: Home, desktopOnly: true },
   { to: '/bills?name=Property Taxes|HOA Fees', label: 'Property Taxes & HOA', icon: Landmark, desktopOnly: true },
   { to: '/bills?name=Electricity|Water|Gas|Trash', label: 'Utilities', icon: Zap, desktopOnly: true },
   { to: '/bills?name=Internet|Home Maintenance', label: 'Internet & Home Maintenance', icon: Wifi, desktopOnly: true },
   { to: '/bills?name=Auto Loan|Lease Payment|Auto Insurance', label: 'Auto Loan & Insurance', icon: Banknote, desktopOnly: true },
   { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
-  { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments|Credit Card Payments %26 Debt Payoff|Student Loans|Personal Loans', label: 'Financial Goals & Obligations', icon: TrendingUp, desktopOnly: true },
+  {
+    label: 'Financial Goals & Obligations', icon: TrendingUp, desktopOnly: true,
+    children: [
+      { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments' },
+      { to: '/bills?name=Credit Card Payments %26 Debt Payoff', label: 'Credit Card & Debt Payoff' },
+      { to: '/bills?name=Student Loans', label: 'Student Loans' },
+      { to: '/bills?name=Personal Loans', label: 'Personal Loans' },
+    ],
+  },
 ];
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [openGroups, setOpenGroups] = useState({});
   const isActive = (path) => {
     const [p, q] = path.split('?');
     const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
@@ -58,8 +124,46 @@ export default function Layout() {
           <p className="text-sm text-muted-foreground">Mushmoney</p>
           <h1 className="text-lg font-semibold">Budget Tracker</h1>
         </div>
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
+            if (item.children) {
+              const parentActive = item.children.some((c) => isActive(c.to));
+              const open = openGroups[item.label] ?? parentActive;
+              return (
+                <div key={item.label}>
+                  <button
+                    onClick={() => setOpenGroups((s) => ({ ...s, [item.label]: !s[item.label] }))}
+                    className={cn(
+                      'w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
+                      parentActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    )}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
+                  </button>
+                  {open && (
+                    <div className="mt-1 ml-5 space-y-0.5 border-l border-border pl-3">
+                      {item.children.map((child) => {
+                        const active = isActive(child.to);
+                        return (
+                          <Link
+                            key={child.to}
+                            to={child.to}
+                            className={cn(
+                              'flex items-center rounded-md px-3 py-2 text-sm transition',
+                              active ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                            )}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            }
             const active = isActive(item.to);
             return (
               <Link
