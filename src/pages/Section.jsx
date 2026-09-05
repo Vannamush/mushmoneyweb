@@ -33,7 +33,7 @@ export default function Section() {
       <SelectorHeader
         icon={Tag}
         title={name}
-        pills={[{ key: 'all', label: 'All' }, ...sectionCats.map((c) => ({ key: c.id, label: c.name }))]}
+        pills={sectionCats.map((c) => ({ key: c.id, label: c.name }))}
         selectedKey={selectedCat}
         onSelect={setSelectedCat}
         action={
