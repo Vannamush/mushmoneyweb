@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Trash2, Pencil, Plus, CreditCard, Home, Receipt } from 'lucide-react';
+import { Trash2, Pencil, Plus, Home, Receipt } from 'lucide-react';
 import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import SelectorHeader from '@/components/SelectorHeader';
@@ -22,8 +22,6 @@ export default function Bills() {
   const refresh = useRefresh(['bills']);
   const [editing, setEditing] = useState(null);
   const [adding, setAdding] = useState(false);
-  const [paying, setPaying] = useState(null);
-  const [error, setError] = useState('');
 
   const visible = bills.filter((b) => {
     if (nameFilter) return nameFilter.split('|').includes(b.name);
@@ -38,33 +36,6 @@ export default function Bills() {
     if (!confirm(`Delete "${b.name}"?`)) return;
     await base44.entities.Bill.delete(b.id);
     refresh();
-  };
-
-  const pay = async (b) => {
-    if (window.self !== window.top) {
-      alert('Checkout only works from the published app. Open the app in a new tab to pay.');
-      return;
-    }
-    setError('');
-    setPaying(b.id);
-    try {
-      const res = await base44.functions.invoke('createCheckout', {
-        amount: b.amount,
-        name: b.name,
-        mode: 'subscription',
-        interval: b.interval || 'month',
-      });
-      if (res.data?.url) {
-        await base44.entities.Bill.update(b.id, { last_paid: new Date().toISOString().slice(0, 10) });
-        refresh();
-        window.location.href = res.data.url;
-        return;
-      }
-      setError(res.data?.error || 'Could not start checkout. Try again.');
-    } catch (e) {
-      setError('Could not start checkout. Try again.');
-    }
-    setPaying(null);
   };
 
   return (
@@ -82,13 +53,11 @@ export default function Bills() {
         }
       />
 
-      {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
-
       <div className="space-y-4">
         {visible.length === 0 && (
           <div className="rounded-2xl border border-dashed border-[#1b2336] p-8 text-center">
             <Home className="h-8 w-8 text-[#9ca3af] mx-auto mb-2" />
-            <p className="text-sm text-[#9ca3af]">No bills yet. Add your mortgage or any recurring bill to charge it to a card.</p>
+            <p className="text-sm text-[#9ca3af]">No bills yet. Add your mortgage or any recurring bill to track it here.</p>
           </div>
         )}
         {(() => {
@@ -99,53 +68,41 @@ export default function Bills() {
             if (g) (grouped[g.label] = grouped[g.label] || []).push(b);
             else other.push(b);
           });
-          const renderBill = (b) => (
-            <div key={b.id} className="rounded-2xl bg-[#161e2e] p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate text-white">{b.name}</p>
-                  <p className="text-sm text-[#9ca3af]">
-                    {formatCurrency(b.amount)} / {b.interval === 'year' ? 'year' : 'month'}
-                    {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
-                  </p>
+          const renderGroup = (label, items) => {
+            if (!items.length) return null;
+            const total = items.reduce((s, b) => s + Number(b.amount), 0);
+            return (
+              <div key={label} className="rounded-2xl bg-[#161e2e] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[#1b2336]">
+                  <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{label}</h2>
+                  <span className="text-xs text-[#9ca3af]">{formatCurrency(total)}</span>
                 </div>
-                <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
-                  <Pencil className="h-4 w-4 text-[#9ca3af]" />
-                </button>
-                <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
-                  <Trash2 className="h-4 w-4 text-[#ef4444]" />
-                </button>
+                <div>
+                  {items.map((b, i) => (
+                    <div key={b.id} className={`px-4 py-3 flex items-center gap-3 ${i > 0 ? 'border-t border-[#1b2336]' : ''}`}>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate text-white">{b.name}</p>
+                        <p className="text-sm text-[#9ca3af]">
+                          {formatCurrency(b.amount)} / {b.interval === 'year' ? 'year' : 'month'}
+                          {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
+                        </p>
+                      </div>
+                      <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
+                        <Pencil className="h-4 w-4 text-[#9ca3af]" />
+                      </button>
+                      <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
+                        <Trash2 className="h-4 w-4 text-[#ef4444]" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <button onClick={() => pay(b)} disabled={paying === b.id} className="w-full mt-3 h-10 rounded-full bg-white text-[#0c111d] flex items-center justify-center gap-2 text-sm font-medium disabled:opacity-60">
-                <CreditCard className="h-4 w-4" />
-                {paying === b.id ? 'Opening checkout…' : `Pay ${formatCurrency(b.amount)} by card`}
-              </button>
-            </div>
-          );
+            );
+          };
           return (
             <>
-              {GROUPS.map((g) => {
-                const items = grouped[g.label] || [];
-                if (!items.length) return null;
-                const total = items.reduce((s, b) => s + Number(b.amount), 0);
-                return (
-                  <div key={g.label}>
-                    <div className="flex items-center justify-between px-1 mb-2">
-                      <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{g.label}</h2>
-                      <span className="text-xs text-[#9ca3af]">{formatCurrency(total)}</span>
-                    </div>
-                    <div className="space-y-2">{items.map(renderBill)}</div>
-                  </div>
-                );
-              })}
-              {other.length > 0 && (
-                <div>
-                  {GROUPS.some((g) => grouped[g.label]) && (
-                    <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af] px-1 mb-2">Other bills</h2>
-                  )}
-                  <div className="space-y-2">{other.map(renderBill)}</div>
-                </div>
-              )}
+              {GROUPS.map((g) => renderGroup(g.label, grouped[g.label] || []))}
+              {renderGroup('Other bills', other)}
             </>
           );
         })()}
