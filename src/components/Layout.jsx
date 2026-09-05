@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -17,6 +17,7 @@ const navItems = [
   { to: '/history?category=Coffee', label: 'Coffee', icon: Coffee, desktopOnly: true },
   { to: '/history?category=Household Supplies', label: 'Household Supplies', icon: ShoppingBasket, desktopOnly: true },
   { to: '/history?category=Toiletries', label: 'Toiletries', icon: SprayCan, desktopOnly: true },
+  { to: '/history?category=Fuel', label: 'Fuel', icon: Fuel, desktopOnly: true },
   { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
   { to: '/bills?name=Mortgage', label: 'Mortgage', icon: Building2, desktopOnly: true },
   { to: '/bills?name=Property Taxes', label: 'Property Taxes', icon: Landmark, desktopOnly: true },
