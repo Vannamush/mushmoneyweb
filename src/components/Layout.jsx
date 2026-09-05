@@ -6,7 +6,13 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { to: '/', label: 'Home', icon: Home },
   { to: '/history', label: 'History', icon: History },
-  { to: '/categories', label: 'Tags', icon: Tag },
+  {
+    to: '/categories', label: 'Tags', icon: Tag,
+    children: [
+      { to: '/add', label: 'Add expense' },
+      { to: '/categories', label: 'Manage tags' },
+    ],
+  },
   { to: '/pay', label: 'Pay', icon: CreditCard },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
   {
