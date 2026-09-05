@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Trash2, Pencil, Plus, Home, Receipt } from 'lucide-react';
+import { Trash2, Pencil, Plus, CreditCard, Home, Receipt } from 'lucide-react';
 import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import SelectorHeader from '@/components/SelectorHeader';
@@ -22,6 +22,8 @@ export default function Bills() {
   const refresh = useRefresh(['bills']);
   const [editing, setEditing] = useState(null);
   const [adding, setAdding] = useState(false);
+  const [paying, setPaying] = useState(null);
+  const [error, setError] = useState('');
 
   const visible = bills.filter((b) => {
     if (nameFilter) return nameFilter.split('|').includes(b.name);
@@ -38,6 +40,33 @@ export default function Bills() {
     refresh();
   };
 
+  const pay = async (b) => {
+    if (window.self !== window.top) {
+      alert('Checkout only works from the published app. Open the app in a new tab to pay.');
+      return;
+    }
+    setError('');
+    setPaying(b.id);
+    try {
+      const res = await base44.functions.invoke('createCheckout', {
+        amount: b.amount,
+        name: b.name,
+        mode: 'subscription',
+        interval: b.interval || 'month',
+      });
+      if (res.data?.url) {
+        await base44.entities.Bill.update(b.id, { last_paid: new Date().toISOString().slice(0, 10) });
+        refresh();
+        window.location.href = res.data.url;
+        return;
+      }
+      setError(res.data?.error || 'Could not start checkout. Try again.');
+    } catch (e) {
+      setError('Could not start checkout. Try again.');
+    }
+    setPaying(null);
+  };
+
   return (
     <div className="px-5 pt-6 pb-10 min-h-screen bg-[#0c111d] text-white">
       <SelectorHeader
@@ -52,6 +81,8 @@ export default function Bills() {
           </button>
         }
       />
+
+      {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
 
       <div className="space-y-4">
         {visible.length === 0 && (
@@ -87,6 +118,10 @@ export default function Bills() {
                           {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
                         </p>
                       </div>
+                      <button onClick={() => pay(b)} disabled={paying === b.id} className="h-9 px-3 rounded-full bg-white text-[#0c111d] text-xs font-medium flex items-center gap-1.5 shrink-0 disabled:opacity-60">
+                        <CreditCard className="h-3.5 w-3.5" />
+                        {paying === b.id ? '…' : 'Pay'}
+                      </button>
                       <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
                         <Pencil className="h-4 w-4 text-[#9ca3af]" />
                       </button>
