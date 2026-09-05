@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -19,6 +19,7 @@ const navItems = [
   { to: '/bills?name=HOA Fees', label: 'HOA Fees', icon: Building, desktopOnly: true },
   { to: '/bills?name=Electricity', label: 'Electricity', icon: Zap, desktopOnly: true },
   { to: '/bills?name=Water', label: 'Water', icon: Droplet, desktopOnly: true },
+  { to: '/bills?name=Trash', label: 'Trash', icon: Trash2, desktopOnly: true },
 ];
 
 export default function Layout() {
