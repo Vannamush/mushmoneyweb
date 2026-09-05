@@ -10,6 +10,7 @@ import { formatCurrency } from '@/lib/money';
 
 const GROUPS = [
   { label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance'] },
+  { label: 'Transportation (Mixed)', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
 ];
 
 export default function Bills() {
