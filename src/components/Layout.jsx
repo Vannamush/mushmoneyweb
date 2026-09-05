@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, Building, ShoppingCart, HeartPulse, Landmark, Zap, Droplet, Trash2, Wifi, Wrench, KeyRound, Utensils, Coffee, ShoppingBasket, SprayCan, Banknote, FileText, Fuel, BatteryCharging, Bus, CarFront, ShieldCheck, PiggyBank, Hammer, CircleParking, Shirt, Clapperboard, Palette } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -26,6 +26,7 @@ const navItems = [
   { to: '/history?category=Parking', label: 'Parking', icon: CircleParking, desktopOnly: true },
   { to: '/history?category=Clothing %26 Accessories', label: 'Clothing & Accessories', icon: Shirt, desktopOnly: true },
   { to: '/history?category=Entertainment', label: 'Entertainment', icon: Clapperboard, desktopOnly: true },
+  { to: '/history?category=Hobbies', label: 'Hobbies', icon: Palette, desktopOnly: true },
   { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
   { to: '/bills?name=Mortgage', label: 'Mortgage', icon: Building2, desktopOnly: true },
   { to: '/bills?name=Property Taxes', label: 'Property Taxes', icon: Landmark, desktopOnly: true },
