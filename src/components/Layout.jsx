@@ -147,7 +147,7 @@ const leafPaths = (item) => {
   const out = [];
   const walk = (nodes) => nodes.forEach((n) => {
     if (n.to) out.push(n.to);
-    else if (n.children) walk(n.children);
+    else if (n.children) { out.push(groupTarget(n.label, n.children)); walk(n.children); }
   });
   if (item.children) walk(item.children);
   return out;
@@ -211,11 +211,12 @@ export default function Layout() {
                     <div className="mt-1 ml-5 space-y-1 border-l border-border pl-3">
                       {item.children.map((child) => {
                         if (child.children) {
-                          const subActive = child.children.some((c) => isActive(c.to));
+                          const target = groupTarget(child.label, child.children);
+                          const subActive = isActive(target);
                           return (
                             <Link
                               key={child.label}
-                              to={groupTarget(child.label, child.children)}
+                              to={target}
                               className={cn(
                                 'flex items-center rounded-md px-3 py-2 text-sm transition',
                                 subActive ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
