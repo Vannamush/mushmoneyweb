@@ -37,7 +37,6 @@ const navItems = [
   { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations', icon: Gift, desktopOnly: true },
   { to: '/history?category=Charitable Donations', label: 'Charitable Donations', icon: HeartHandshake, desktopOnly: true },
   { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees', icon: Scale, desktopOnly: true },
-  { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
   { to: '/bills?name=Rent|Mortgage', label: 'Rent & Mortgage', icon: Home, desktopOnly: true },
   { to: '/bills?name=Property Taxes|HOA Fees', label: 'Property Taxes & HOA', icon: Landmark, desktopOnly: true },
   { to: '/bills?name=Electricity|Water|Gas|Trash', label: 'Utilities', icon: Zap, desktopOnly: true },
@@ -47,7 +46,7 @@ const navItems = [
   { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
   { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments', icon: TrendingUp, desktopOnly: true },
   { to: '/bills?name=Credit Card Payments %26 Debt Payoff', label: 'Credit Card & Debt', icon: CreditCard, desktopOnly: true },
-  { to: '/bills?name=Student Loans %26 Personal Loans', label: 'Student & Personal Loans', icon: Landmark, desktopOnly: true },
+  { to: '/bills?name=Student Loans|Personal Loans|Student Loans %26 Personal Loans', label: 'Student & Personal Loans', icon: GraduationCap, desktopOnly: true },
 ];
 
 export default function Layout() {
