@@ -11,7 +11,7 @@ const navItems = [
   { to: '/bills', label: 'Bills', icon: Receipt },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
   { to: '/history?category=Car', label: 'Car', icon: Car, desktopOnly: true },
-  { to: '/history?category=Medical|Pharmacy %26 Medications', label: 'Medical', icon: HeartPulse, desktopOnly: true },
+
   {
     label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
     children: [
