@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, HeartPulse, Landmark, Zap, Wifi, Banknote, ShoppingBasket, PiggyBank, MonitorPlay, Activity, Eye, TrendingUp, ShoppingBag, Gift, ChevronDown } from 'lucide-react';
+import { Home, History, Tag, Plus, CreditCard, Receipt, Car, HeartPulse, ShoppingBasket, PiggyBank, MonitorPlay, Activity, ShoppingBag, Gift, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -74,21 +74,6 @@ const navItems = [
       { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations' },
       { to: '/history?category=Charitable Donations', label: 'Charitable Donations' },
       { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees' },
-    ],
-  },
-  { to: '/bills?name=Rent|Mortgage', label: 'Rent & Mortgage', icon: Home, desktopOnly: true },
-  { to: '/bills?name=Property Taxes|HOA Fees', label: 'Property Taxes & HOA', icon: Landmark, desktopOnly: true },
-  { to: '/bills?name=Electricity|Water|Gas|Trash', label: 'Utilities', icon: Zap, desktopOnly: true },
-  { to: '/bills?name=Internet|Home Maintenance', label: 'Internet & Home Maintenance', icon: Wifi, desktopOnly: true },
-  { to: '/bills?name=Auto Loan|Lease Payment|Auto Insurance', label: 'Auto Loan & Insurance', icon: Banknote, desktopOnly: true },
-  { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
-  {
-    label: 'Financial Goals & Obligations', icon: TrendingUp, desktopOnly: true,
-    children: [
-      { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments' },
-      { to: '/bills?name=Credit Card Payments %26 Debt Payoff', label: 'Credit Card & Debt Payoff' },
-      { to: '/bills?name=Student Loans', label: 'Student Loans' },
-      { to: '/bills?name=Personal Loans', label: 'Personal Loans' },
     ],
   },
 ];
