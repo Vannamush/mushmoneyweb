@@ -153,11 +153,11 @@ const leafPaths = (item) => {
   return out;
 };
 
-const groupTarget = (children) => {
+const groupTarget = (label, children) => {
   const cats = children
     .map((c) => new URLSearchParams(c.to.split('?')[1] || '').get('category'))
     .filter(Boolean);
-  return `/history?category=${encodeURIComponent(cats.join('|'))}`;
+  return `/section?name=${encodeURIComponent(label)}&category=${encodeURIComponent(cats.join('|'))}`;
 };
 
 export default function Layout() {
@@ -219,7 +219,7 @@ export default function Layout() {
                             <div key={child.label}>
                               <div className="flex items-center gap-1">
                                 <Link
-                                  to={groupTarget(child.children)}
+                                  to={groupTarget(child.label, child.children)}
                                   className={cn(
                                     'flex-1 flex items-center rounded-md px-3 py-2 text-sm transition',
                                     subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
