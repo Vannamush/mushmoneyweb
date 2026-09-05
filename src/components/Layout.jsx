@@ -51,6 +51,7 @@ const navItems = [
   { to: '/bills?name=Auto Insurance', label: 'Auto Insurance', icon: ShieldCheck, desktopOnly: true },
   { to: '/bills?name=Vision Insurance', label: 'Vision Insurance', icon: Eye, desktopOnly: true },
   { to: '/bills?name=Retirement %28401k%2C IRA%29 %26 Investments', label: 'Retirement & Investments', icon: TrendingUp, desktopOnly: true },
+  { to: '/bills?name=Credit Card Payments %26 Debt Payoff', label: 'Credit Card & Debt', icon: CreditCard, desktopOnly: true },
 ];
 
 export default function Layout() {
