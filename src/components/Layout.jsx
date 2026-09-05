@@ -153,6 +153,13 @@ const leafPaths = (item) => {
   return out;
 };
 
+const groupTarget = (children) => {
+  const cats = children
+    .map((c) => new URLSearchParams(c.to.split('?')[1] || '').get('category'))
+    .filter(Boolean);
+  return `/history?category=${encodeURIComponent(cats.join('|'))}`;
+};
+
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -210,16 +217,23 @@ export default function Layout() {
                           const subOpen = openGroups[subKey] ?? subActive;
                           return (
                             <div key={child.label}>
-                              <button
-                                onClick={() => setOpenGroups((s) => ({ ...s, [subKey]: !s[subKey] }))}
-                                className={cn(
-                                  'w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
-                                  subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                                )}
-                              >
-                                <span className="flex-1 text-left">{child.label}</span>
-                                <ChevronDown className={cn('h-4 w-4 transition-transform', subOpen && 'rotate-180')} />
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <Link
+                                  to={groupTarget(child.children)}
+                                  className={cn(
+                                    'flex-1 flex items-center rounded-md px-3 py-2 text-sm transition',
+                                    subActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                                  )}
+                                >
+                                  {child.label}
+                                </Link>
+                                <button
+                                  onClick={() => setOpenGroups((s) => ({ ...s, [subKey]: !s[subKey] }))}
+                                  className="h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted transition"
+                                >
+                                  <ChevronDown className={cn('h-4 w-4 transition-transform', subOpen && 'rotate-180')} />
+                                </button>
+                              </div>
                               {subOpen && (
                                 <div className="mt-0.5 ml-3 space-y-0.5 border-l border-border pl-2">
                                   {child.children.map((leaf) => {
