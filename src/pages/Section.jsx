@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useExpenses, useCategories } from '@/lib/api';
+import { base44 } from '@/api/base44Client';
+import { useExpenses, useCategories, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import ExpenseEditDialog from '@/components/ExpenseEditDialog';
 import SelectorHeader from '@/components/SelectorHeader';
-import { Plus, Tag } from 'lucide-react';
+import { Plus, Tag, Pencil, Trash2 } from 'lucide-react';
 
 export default function Section() {
   const [params] = useSearchParams();
@@ -14,8 +15,15 @@ export default function Section() {
   const { data: expenses = [] } = useExpenses();
   const { data: categories = [] } = useCategories();
   const navigate = useNavigate();
+  const refresh = useRefresh(['expenses']);
   const [editing, setEditing] = useState(null);
   const [selectedCat, setSelectedCat] = useState('all');
+
+  const del = async (e) => {
+    if (!confirm('Delete this expense?')) return;
+    await base44.entities.Expense.delete(e.id);
+    refresh();
+  };
 
   const catMap = useMemo(() => Object.fromEntries(categories.map((c) => [c.id, c])), [categories]);
   const sectionCats = useMemo(() => categories.filter((c) => names.includes(c.name)), [categories, names]);
@@ -61,26 +69,29 @@ export default function Section() {
             if (!items.length) return null;
             const catTotal = items.reduce((s, e) => s + Number(e.amount), 0);
             return (
-              <div key={cat.id} className="rounded-2xl bg-[#161e2e] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-[#1b2336]">
+              <div key={cat.id}>
+                <div className="flex items-center justify-between px-1 mb-2">
                   <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{cat.emoji} {cat.name}</h2>
                   <span className="text-xs text-[#9ca3af]">{formatCurrency(catTotal)}</span>
                 </div>
-                <div>
-                  {items.map((e, i) => (
-                    <button
-                      key={e.id}
-                      onClick={() => setEditing(e)}
-                      className={`w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-[#1b2336] transition ${i > 0 ? 'border-t border-[#1b2336]' : ''}`}
-                    >
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate text-white">{e.note || cat.name}</p>
-                        <p className="text-sm text-[#9ca3af]">
-                          {new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                        </p>
+                <div className="space-y-2">
+                  {items.map((e) => (
+                    <div key={e.id} className="rounded-2xl bg-[#161e2e] p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium truncate text-white">{e.note || cat.name}</p>
+                          <p className="text-sm text-[#9ca3af]">
+                            {formatCurrency(e.amount)} · {new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </p>
+                        </div>
+                        <button onClick={() => setEditing(e)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
+                          <Pencil className="h-4 w-4 text-[#9ca3af]" />
+                        </button>
+                        <button onClick={() => del(e)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
+                          <Trash2 className="h-4 w-4 text-[#ef4444]" />
+                        </button>
                       </div>
-                      <span className="font-semibold text-white">{formatCurrency(e.amount)}</span>
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>
