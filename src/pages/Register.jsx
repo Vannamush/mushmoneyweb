@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
+import { UserPlus, Mail, Lock, Loader2, User } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Register() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,6 +31,9 @@ export default function Register() {
     setLoading(true);
     try {
       await base44.auth.register({ email, password });
+      try {
+        await base44.auth.updateMe({ full_name: username.trim() });
+      } catch (_) {}
       setShowOtp(true);
     } catch (err) {
       setError(err.message || "Registration failed");
@@ -167,6 +171,22 @@ export default function Register() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="username">Username</Label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
+            <Input
+              id="username"
+              type="text"
+              autoComplete="username"
+              placeholder="yourname"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="pl-10 h-12"
+              required
+            />
+          </div>
+        </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <div className="relative">
