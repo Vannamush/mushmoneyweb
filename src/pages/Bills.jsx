@@ -9,7 +9,7 @@ import { useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 
 const GROUPS = [
-  { label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance'] },
+  { label: 'Housing & Essential Utilities (Fixed/Needs)', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
   { label: 'Transportation (Mixed)', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
 ];
 
