@@ -33,7 +33,7 @@ export default function Section() {
   const total = filtered.reduce((s, e) => s + Number(e.amount), 0);
 
   return (
-    <div className="px-5 pt-6">
+    <div className="px-5 pt-6 pb-10 min-h-screen bg-[#0c111d] text-white">
       <SelectorHeader
         icon={Tag}
         title={name}
@@ -51,8 +51,8 @@ export default function Section() {
       />
 
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border p-8 text-center">
-          <p className="text-sm text-muted-foreground">No expenses in this section yet.</p>
+        <div className="rounded-2xl border border-dashed border-[#1b2336] p-8 text-center">
+          <p className="text-sm text-[#9ca3af]">No expenses in this section yet.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -63,24 +63,24 @@ export default function Section() {
             return (
               <div key={cat.id}>
                 <div className="flex items-center justify-between px-1 mb-2">
-                  <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{cat.emoji} {cat.name}</h2>
-                  <span className="text-xs text-muted-foreground">{formatCurrency(catTotal)}</span>
+                  <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{cat.emoji} {cat.name}</h2>
+                  <span className="text-xs text-[#9ca3af]">{formatCurrency(catTotal)}</span>
                 </div>
                 <div className="space-y-2">
                   {items.map((e) => (
                     <button
                       key={e.id}
                       onClick={() => setEditing(e)}
-                      className="w-full text-left rounded-2xl bg-card border border-border p-4"
+                      className="w-full text-left rounded-2xl bg-[#161e2e] p-4"
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{e.note || cat.name}</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="font-medium truncate text-white">{e.note || cat.name}</p>
+                          <p className="text-sm text-[#9ca3af]">
                             {new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                           </p>
                         </div>
-                        <span className="font-semibold">{formatCurrency(e.amount)}</span>
+                        <span className="font-semibold text-white">{formatCurrency(e.amount)}</span>
                       </div>
                     </button>
                   ))}

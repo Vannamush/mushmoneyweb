@@ -68,7 +68,7 @@ export default function Bills() {
   };
 
   return (
-    <div className="px-5 pt-6">
+    <div className="px-5 pt-6 pb-10 min-h-screen bg-[#0c111d] text-white">
       <SelectorHeader
         icon={Receipt}
         title="Bills"
@@ -86,9 +86,9 @@ export default function Bills() {
 
       <div className="space-y-4">
         {visible.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-border p-8 text-center">
-            <Home className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">No bills yet. Add your mortgage or any recurring bill to charge it to a card.</p>
+          <div className="rounded-2xl border border-dashed border-[#1b2336] p-8 text-center">
+            <Home className="h-8 w-8 text-[#9ca3af] mx-auto mb-2" />
+            <p className="text-sm text-[#9ca3af]">No bills yet. Add your mortgage or any recurring bill to charge it to a card.</p>
           </div>
         )}
         {(() => {
@@ -100,26 +100,26 @@ export default function Bills() {
             else other.push(b);
           });
           const renderBill = (b) => (
-            <div key={b.id} className="rounded-2xl bg-card border border-border p-4">
+            <div key={b.id} className="rounded-2xl bg-[#161e2e] p-4">
               <div className="flex items-center gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{b.name}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-medium truncate text-white">{b.name}</p>
+                  <p className="text-sm text-[#9ca3af]">
                     {formatCurrency(b.amount)} / {b.interval === 'year' ? 'year' : 'month'}
                     {b.last_paid ? ` · last charged ${b.last_paid}` : ''}
                   </p>
                 </div>
-                <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
-                  <Pencil className="h-4 w-4 text-muted-foreground" />
+                <button onClick={() => setEditing(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
+                  <Pencil className="h-4 w-4 text-[#9ca3af]" />
                 </button>
-                <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
-                  <Trash2 className="h-4 w-4 text-red-500" />
+                <button onClick={() => del(b)} className="h-9 w-9 rounded-full bg-[#1b2336] flex items-center justify-center shrink-0">
+                  <Trash2 className="h-4 w-4 text-[#ef4444]" />
                 </button>
               </div>
-              <Button onClick={() => pay(b)} disabled={paying === b.id} className="w-full mt-3" size="sm">
+              <button onClick={() => pay(b)} disabled={paying === b.id} className="w-full mt-3 h-10 rounded-full bg-white text-[#0c111d] flex items-center justify-center gap-2 text-sm font-medium disabled:opacity-60">
                 <CreditCard className="h-4 w-4" />
                 {paying === b.id ? 'Opening checkout…' : `Pay ${formatCurrency(b.amount)} by card`}
-              </Button>
+              </button>
             </div>
           );
           return (
@@ -131,8 +131,8 @@ export default function Bills() {
                 return (
                   <div key={g.label}>
                     <div className="flex items-center justify-between px-1 mb-2">
-                      <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{g.label}</h2>
-                      <span className="text-xs text-muted-foreground">{formatCurrency(total)}</span>
+                      <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af]">{g.label}</h2>
+                      <span className="text-xs text-[#9ca3af]">{formatCurrency(total)}</span>
                     </div>
                     <div className="space-y-2">{items.map(renderBill)}</div>
                   </div>
@@ -141,7 +141,7 @@ export default function Bills() {
               {other.length > 0 && (
                 <div>
                   {GROUPS.some((g) => grouped[g.label]) && (
-                    <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-1 mb-2">Other bills</h2>
+                    <h2 className="text-xs font-semibold uppercase tracking-wide text-[#9ca3af] px-1 mb-2">Other bills</h2>
                   )}
                   <div className="space-y-2">{other.map(renderBill)}</div>
                 </div>
