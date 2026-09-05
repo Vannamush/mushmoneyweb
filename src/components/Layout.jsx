@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
-import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, ShoppingCart, HeartPulse } from 'lucide-react';
+import { Home, History, CalendarDays, Tag, Plus, CreditCard, Receipt, Car, GraduationCap, Building2, ShoppingCart, HeartPulse, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -15,6 +15,7 @@ const navItems = [
   { to: '/history?category=Medical', label: 'Medical', icon: HeartPulse, desktopOnly: true },
   { to: '/bills?name=Student Loans', label: 'Student Loans', icon: GraduationCap, desktopOnly: true },
   { to: '/bills?name=Mortgage', label: 'Mortgage', icon: Building2, desktopOnly: true },
+  { to: '/bills?name=Property Taxes', label: 'Property Taxes', icon: Landmark, desktopOnly: true },
 ];
 
 export default function Layout() {
