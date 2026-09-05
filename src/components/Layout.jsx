@@ -19,10 +19,7 @@ const navItems = [
   { to: '/history?category=Streaming|Software %26 Cloud Storage|Gym|Fitness Memberships|News|Magazines|Magazine Subscriptions', label: 'Subscriptions & Digital', icon: MonitorPlay, desktopOnly: true },
   { to: '/history?category=Health|Dental|Pharmacy %26 Medications|Doctor %26 Specialist Visits|Fitness Equipment %26 Supplements', label: 'Health & Wellness', icon: Activity, desktopOnly: true },
 
-  { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels', icon: Plane, desktopOnly: true },
-  { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations', icon: Gift, desktopOnly: true },
-  { to: '/history?category=Charitable Donations', label: 'Charitable Donations', icon: HeartHandshake, desktopOnly: true },
-  { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees', icon: Scale, desktopOnly: true },
+  { to: '/history?category=Travel%2C Flights%2C %26 Hotels|Gifts %26 Celebrations|Charitable Donations|Taxes %26 Legal Fees', label: 'Life Events, Giving & Misc', icon: Gift, desktopOnly: true },
   { to: '/bills?name=Rent|Mortgage', label: 'Rent & Mortgage', icon: Home, desktopOnly: true },
   { to: '/bills?name=Property Taxes|HOA Fees', label: 'Property Taxes & HOA', icon: Landmark, desktopOnly: true },
   { to: '/bills?name=Electricity|Water|Gas|Trash', label: 'Utilities', icon: Zap, desktopOnly: true },
