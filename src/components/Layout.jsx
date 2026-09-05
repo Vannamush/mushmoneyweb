@@ -8,6 +8,7 @@ const navItems = [
   { to: '/history', label: 'History', icon: History },
   { to: '/categories', label: 'Tags', icon: Tag },
   { to: '/pay', label: 'Pay', icon: CreditCard },
+  { to: '/savings', label: 'Savings', icon: PiggyBank },
   {
     to: '/bills', label: 'Bills', icon: Receipt,
     children: [
@@ -15,7 +16,6 @@ const navItems = [
       { to: '/bills?group=transportation', label: 'Transportation' },
     ],
   },
-  { to: '/savings', label: 'Savings', icon: PiggyBank },
 
   {
     label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
