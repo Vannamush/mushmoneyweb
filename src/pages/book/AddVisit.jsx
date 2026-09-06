@@ -5,7 +5,7 @@ import { ChevronLeft, Camera, UserPlus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/ui/image';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import BottomSheetSelect from '@/components/BottomSheetSelect';
 import NewClientDialog from '@/components/book/NewClientDialog';
 import { useClients, useBookRefresh } from '@/lib/bookApi';
 import { todayISO } from '@/lib/book';
@@ -82,16 +82,13 @@ export default function AddVisit() {
         <div>
           <label className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Client</label>
           <div className="flex gap-2 mt-1">
-            <Select value={clientId} onValueChange={setClientId}>
-              <SelectTrigger className="h-14 text-base flex-1 bg-card">
-                <SelectValue placeholder="Pick a client" />
-              </SelectTrigger>
-              <SelectContent>
-                {clients.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <BottomSheetSelect
+              value={clientId}
+              onChange={setClientId}
+              placeholder="Pick a client"
+              options={clients.map((c) => ({ value: c.id, label: c.name }))}
+              triggerClassName="h-14 text-base flex-1 bg-card"
+            />
             <Button variant="outline" onClick={() => setNewOpen(true)} className="h-14 w-14 shrink-0">
               <UserPlus className="h-5 w-5" />
             </Button>

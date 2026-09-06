@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import BottomSheetSelect from '@/components/BottomSheetSelect';
 import { formatCurrencyExact } from '@/lib/money';
 
 export default function ImportRow({ row, categories, onToggle, onCategory }) {
@@ -20,18 +20,13 @@ export default function ImportRow({ row, categories, onToggle, onCategory }) {
           {!row.duplicate && row.isCredit && ' · looks like income'}
         </p>
         {!row.duplicate && (
-          <Select value={row.category_id || ''} onValueChange={(v) => onCategory(row.key, v)}>
-            <SelectTrigger className="h-8 mt-2 text-xs">
-              <SelectValue placeholder="Pick a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  {c.emoji} {c.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <BottomSheetSelect
+            value={row.category_id || ''}
+            onChange={(v) => onCategory(row.key, v)}
+            placeholder="Pick a category"
+            options={categories.map((c) => ({ value: c.id, label: `${c.emoji} ${c.name}` }))}
+            triggerClassName="h-8 mt-2 text-xs"
+          />
         )}
       </div>
       <span className="text-sm font-medium shrink-0">{formatCurrencyExact(row.amount)}</span>

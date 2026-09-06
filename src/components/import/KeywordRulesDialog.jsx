@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import BottomSheetSelect from '@/components/BottomSheetSelect';
 import { Trash2 } from 'lucide-react';
 import { useKeywordRules, useRefresh } from '@/lib/api';
 
@@ -50,18 +50,13 @@ export default function KeywordRulesDialog({ open, onOpenChange, categories }) {
 
         <div className="space-y-2">
           <Input placeholder="Keyword (e.g. TARGET)" value={keyword} onChange={(e) => setKeyword(e.target.value)} className="h-10" />
-          <Select value={categoryId} onValueChange={setCategoryId}>
-            <SelectTrigger className="h-10">
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  {c.emoji} {c.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <BottomSheetSelect
+            value={categoryId}
+            onChange={setCategoryId}
+            placeholder="Category"
+            options={categories.map((c) => ({ value: c.id, label: `${c.emoji} ${c.name}` }))}
+            triggerClassName="h-10"
+          />
           <Button onClick={add} disabled={busy || !keyword.trim() || !categoryId} className="w-full h-10">
             Add rule
           </Button>

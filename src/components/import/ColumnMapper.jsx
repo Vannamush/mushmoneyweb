@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import BottomSheetSelect from '@/components/BottomSheetSelect';
 
 const FIELDS = [
   { key: 'date', label: 'Date' },
@@ -14,18 +14,13 @@ export default function ColumnMapper({ headers, columns, onChange }) {
       {FIELDS.map((f) => (
         <div key={f.key} className="flex items-center gap-3">
           <span className="text-sm w-24 shrink-0">{f.label}</span>
-          <Select value={columns[f.key] || ''} onValueChange={(v) => onChange({ ...columns, [f.key]: v })}>
-            <SelectTrigger className="h-10 flex-1">
-              <SelectValue placeholder="Choose column" />
-            </SelectTrigger>
-            <SelectContent>
-              {headers.map((h, i) => (
-                <SelectItem key={`${h}-${i}`} value={h}>
-                  {h || `Column ${i + 1}`}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <BottomSheetSelect
+            value={columns[f.key] || ''}
+            onChange={(v) => onChange({ ...columns, [f.key]: v })}
+            placeholder="Choose column"
+            options={headers.map((h, i) => ({ value: h, label: h || `Column ${i + 1}` }))}
+            triggerClassName="h-10 flex-1"
+          />
         </div>
       ))}
     </div>

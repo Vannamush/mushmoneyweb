@@ -168,6 +168,44 @@
     --ring: 280 80% 55%;
     --radius: 1rem;
     }
+
+    .dark [data-theme="minimal"] {
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+    --card: 222 40% 11%;
+    --card-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --accent: 217 33% 20%;
+    --accent-foreground: 210 40% 98%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 210 40% 98%;
+    --radius: 0.75rem;
+    }
+
+    .dark [data-theme="playful"] {
+    --background: 280 40% 7%;
+    --foreground: 48 80% 96%;
+    --card: 280 35% 12%;
+    --card-foreground: 48 80% 96%;
+    --muted: 280 30% 18%;
+    --muted-foreground: 280 20% 70%;
+    --primary: 280 80% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 280 30% 18%;
+    --secondary-foreground: 48 80% 96%;
+    --accent: 280 30% 22%;
+    --accent-foreground: 48 80% 96%;
+    --border: 280 30% 22%;
+    --input: 280 30% 22%;
+    --ring: 280 80% 65%;
+    --radius: 1rem;
+    }
     }
 
     @layer base {
@@ -182,6 +220,15 @@
   body {
     @apply bg-background text-foreground font-body;
     overscroll-behavior-y: none;
+  }
+
+  /* Hide default browser scrollbars on all scrolling viewports for a native feel */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
   }
 
   button, a, nav, [role="button"], .no-select {
