@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Home, History, Tag, CreditCard, Receipt, Car, HeartPulse, ShoppingBasket, PiggyBank, MonitorPlay, Activity, ShoppingBag, Gift, ChevronDown } from 'lucide-react';
+import { Home, History, Tag, CreditCard, Receipt, Car, HeartPulse, ShoppingBasket, PiggyBank, MonitorPlay, Activity, ShoppingBag, Gift } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -143,16 +143,6 @@ const navItems = [
   },
 ];
 
-const leafPaths = (item) => {
-  const out = [];
-  const walk = (nodes) => nodes.forEach((n) => {
-    if (n.to) out.push(n.to);
-    else if (n.children) { out.push(groupTarget(n.label, n.children)); walk(n.children); }
-  });
-  if (item.children) walk(item.children);
-  return out;
-};
-
 const groupTarget = (label, children) => {
   const cats = children
     .map((c) => new URLSearchParams(c.to.split('?')[1] || '').get('category'))
@@ -162,7 +152,6 @@ const groupTarget = (label, children) => {
 
 export default function Layout() {
   const location = useLocation();
-  const [openGroups, setOpenGroups] = useState({});
   const isActive = (path) => {
     const [p, q] = path.split('?');
     const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
@@ -192,60 +181,54 @@ export default function Layout() {
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             if (item.children) {
-              const parentActive = leafPaths(item).some(isActive);
-              const open = openGroups[item.label] ?? parentActive;
               return (
-                <div key={item.label}>
-                  <button
-                    onClick={() => setOpenGroups((s) => ({ ...s, [item.label]: !s[item.label] }))}
-                    className={cn(
-                      'w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
-                      parentActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                    )}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    <span className="flex-1 text-left">{item.label}</span>
-                    <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
-                  </button>
-                  {open && (
-                    <div className="mt-1 ml-5 space-y-1 border-l border-border pl-3">
-                      {item.children.map((child) => {
-                        if (child.children) {
-                          const target = groupTarget(child.label, child.children);
-                          const subActive = isActive(target);
-                          return (
-                            <Link
-                              key={child.label}
-                              to={target}
-                              className={cn(
-                                'flex items-center rounded-md px-3 py-2 text-sm transition',
-                                subActive ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                              )}
-                            >
-                              {child.label}
-                            </Link>
-                          );
-                        }
-                        const active = isActive(child.to);
-                        return (
-                          <Link
-                            key={child.to}
-                            to={child.to}
-                            className={cn(
-                              'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
-                              active
-                                ? 'bg-primary text-primary-foreground font-medium'
-                                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                            )}
-                          >
-                            {child.icon && <child.icon className="h-4 w-4" />}
-                            {child.label}
-                          </Link>
-                        );
-                      })}
-                    </div>
+                <React.Fragment key={item.label}>
+                  {item.to && (
+                    <Link
+                      to={item.to}
+                      className={cn(
+                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
+                        isActive(item.to) ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {item.label}
+                    </Link>
                   )}
-                </div>
+                  {item.children.map((child) => {
+                    if (child.children) {
+                      const target = groupTarget(child.label, child.children);
+                      return (
+                        <Link
+                          key={child.label}
+                          to={target}
+                          className={cn(
+                            'flex items-center rounded-md px-3 py-2 text-sm transition',
+                            isActive(target) ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                          )}
+                        >
+                          {child.label}
+                        </Link>
+                      );
+                    }
+                    const active = isActive(child.to);
+                    return (
+                      <Link
+                        key={child.to}
+                        to={child.to}
+                        className={cn(
+                          'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
+                          active
+                            ? 'bg-primary text-primary-foreground font-medium'
+                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        )}
+                      >
+                        {child.icon && <child.icon className="h-4 w-4" />}
+                        {child.label}
+                      </Link>
+                    );
+                  })}
+                </React.Fragment>
               );
             }
             const active = isActive(item.to);
