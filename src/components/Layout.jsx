@@ -1,7 +1,8 @@
 import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Home, History, Tag, CreditCard, Receipt, Car, HeartPulse, ShoppingBasket, PiggyBank, MonitorPlay, Activity, ShoppingBag, Gift } from 'lucide-react';
+import { Home, History, Tag, CreditCard, Receipt, PiggyBank } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCategories } from '@/lib/api';
 
 const navItems = [
   { to: '/', label: 'Home', icon: Home },
@@ -9,149 +10,13 @@ const navItems = [
   { to: '/categories', label: 'Tags', icon: Tag },
   { to: '/pay', label: 'Pay', icon: CreditCard },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
-  {
-    to: '/bills', label: 'Bills', icon: Receipt,
-    children: [
-      { to: '/bills?group=housing', label: 'Housing & Essentials' },
-      { to: '/bills?group=transportation', label: 'Transportation' },
-    ],
-  },
-  {
-    label: 'Daily Living & Food', icon: ShoppingBasket, desktopOnly: true,
-    children: [
-      {
-        label: 'Food & Drink',
-        children: [
-          { to: '/history?category=Groceries', label: 'Groceries' },
-          { to: '/history?category=Dining Out', label: 'Dining Out' },
-          { to: '/history?category=Coffee', label: 'Coffee' },
-        ],
-      },
-      {
-        label: 'Household & Care',
-        children: [
-          { to: '/history?category=Household Supplies', label: 'Household Supplies' },
-          { to: '/history?category=Toiletries', label: 'Toiletries' },
-          { to: '/history?category=Personal Care (Haircuts%2C Grooming)', label: 'Personal Care' },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Transportation', icon: Car, desktopOnly: true,
-    children: [
-      {
-        label: 'Vehicle',
-        children: [
-          { to: '/history?category=Car', label: 'Car' },
-          { to: '/history?category=Fuel', label: 'Fuel' },
-          { to: '/history?category=EV Charging', label: 'EV Charging' },
-          { to: '/history?category=Maintenance', label: 'Maintenance' },
-        ],
-      },
-      {
-        label: 'Transit & Rides',
-        children: [
-          { to: '/history?category=Public Transit', label: 'Public Transit' },
-          { to: '/history?category=Rideshare', label: 'Rideshare' },
-          { to: '/history?category=Parking', label: 'Parking' },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Lifestyle & Personal', icon: ShoppingBag, desktopOnly: true,
-    children: [
-      {
-        label: 'Shopping',
-        children: [
-          { to: '/history?category=Clothing %26 Accessories', label: 'Clothing & Accessories' },
-          { to: '/history?category=Shopping', label: 'Shopping' },
-          { to: '/history?category=Electronics', label: 'Electronics' },
-        ],
-      },
-      {
-        label: 'Leisure',
-        children: [
-          { to: '/history?category=Entertainment', label: 'Entertainment' },
-          { to: '/history?category=Hobbies', label: 'Hobbies' },
-          { to: '/history?category=Recreation', label: 'Recreation' },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Subscriptions & Digital', icon: MonitorPlay, desktopOnly: true,
-    children: [
-      {
-        label: 'Media & News',
-        children: [
-          { to: '/history?category=Streaming', label: 'Streaming' },
-          { to: '/history?category=News', label: 'News' },
-          { to: '/history?category=Magazines', label: 'Magazines' },
-          { to: '/history?category=Magazine Subscriptions', label: 'Magazine Subscriptions' },
-        ],
-      },
-      {
-        label: 'Software & Fitness',
-        children: [
-          { to: '/history?category=Software %26 Cloud Storage', label: 'Software & Cloud Storage' },
-          { to: '/history?category=Gym', label: 'Gym' },
-          { to: '/history?category=Fitness Memberships', label: 'Fitness Memberships' },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Health & Wellness', icon: Activity, desktopOnly: true,
-    children: [
-      {
-        label: 'Medical & Dental',
-        children: [
-          { to: '/history?category=Health', label: 'Health' },
-          { to: '/history?category=Dental', label: 'Dental' },
-          { to: '/history?category=Doctor %26 Specialist Visits', label: 'Doctor & Specialist Visits' },
-        ],
-      },
-      {
-        label: 'Pharmacy & Fitness',
-        children: [
-          { to: '/history?category=Medical|Pharmacy %26 Medications', label: 'Pharmacy & Medications' },
-          { to: '/history?category=Fitness Equipment %26 Supplements', label: 'Fitness Equipment & Supplements' },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Life Events, Giving & Misc', icon: Gift, desktopOnly: true,
-    children: [
-      {
-        label: 'Travel & Celebrations',
-        children: [
-          { to: '/history?category=Travel%2C Flights%2C %26 Hotels', label: 'Travel, Flights & Hotels' },
-          { to: '/history?category=Gifts %26 Celebrations', label: 'Gifts & Celebrations' },
-        ],
-      },
-      {
-        label: 'Giving & Obligations',
-        children: [
-          { to: '/history?category=Charitable Donations', label: 'Charitable Donations' },
-          { to: '/history?category=Taxes %26 Legal Fees', label: 'Taxes & Legal Fees' },
-        ],
-      },
-    ],
-  },
+  { to: '/bills', label: 'Bills', icon: Receipt },
 ];
-
-const groupTarget = (label, children) => {
-  const cats = children
-    .map((c) => new URLSearchParams(c.to.split('?')[1] || '').get('category'))
-    .filter(Boolean);
-  return `/section?name=${encodeURIComponent(label)}&category=${encodeURIComponent(cats.join('|'))}`;
-};
 
 export default function Layout() {
   const location = useLocation();
+  const { data: categories = [] } = useCategories();
+
   const isActive = (path) => {
     const [p, q] = path.split('?');
     const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
@@ -168,7 +33,23 @@ export default function Layout() {
     if (p === '/bills') return !location.search.includes('name=') && !location.search.includes('group=');
     return true;
   };
-  const mobileItems = navItems.filter((i) => !i.desktopOnly);
+
+  const parents = categories
+    .filter((c) => !c.parent_id)
+    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+  const childrenOf = (pid) => categories
+    .filter((c) => c.parent_id === pid)
+    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+
+  const sectionTarget = (parent, children) => {
+    const cats = children.map((c) => c.name).join('|');
+    return `/section?name=${encodeURIComponent(parent.name)}&category=${encodeURIComponent(cats)}`;
+  };
+
+  const catActive = (name) => {
+    const currentParams = new URLSearchParams(location.search);
+    return location.pathname === '/history' && currentParams.get('category') === name;
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -180,57 +61,6 @@ export default function Layout() {
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            if (item.children) {
-              return (
-                <React.Fragment key={item.label}>
-                  {item.to && (
-                    <Link
-                      to={item.to}
-                      className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
-                        isActive(item.to) ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                      )}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      {item.label}
-                    </Link>
-                  )}
-                  {item.children.map((child) => {
-                    if (child.children) {
-                      const target = groupTarget(child.label, child.children);
-                      return (
-                        <Link
-                          key={child.label}
-                          to={target}
-                          className={cn(
-                            'flex items-center rounded-md px-3 py-2 text-sm transition',
-                            isActive(target) ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                          )}
-                        >
-                          {child.label}
-                        </Link>
-                      );
-                    }
-                    const active = isActive(child.to);
-                    return (
-                      <Link
-                        key={child.to}
-                        to={child.to}
-                        className={cn(
-                          'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition',
-                          active
-                            ? 'bg-primary text-primary-foreground font-medium'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                        )}
-                      >
-                        {child.icon && <child.icon className="h-4 w-4" />}
-                        {child.label}
-                      </Link>
-                    );
-                  })}
-                </React.Fragment>
-              );
-            }
             const active = isActive(item.to);
             return (
               <Link
@@ -246,6 +76,46 @@ export default function Layout() {
               </Link>
             );
           })}
+
+          {parents.length > 0 && (
+            <>
+              <div className="pt-4">
+                <div className="mx-3 border-t border-border" />
+              </div>
+              {parents.map((parent) => {
+                const kids = childrenOf(parent.id);
+                const parentTarget = sectionTarget(parent, kids);
+                const parentActive = isActive(parentTarget);
+                return (
+                  <div key={parent.id} className="pt-2 space-y-0.5">
+                    <Link
+                      to={parentTarget}
+                      className={cn(
+                        'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition',
+                        parentActive ? 'bg-primary text-primary-foreground font-medium' : 'text-foreground font-medium hover:bg-muted'
+                      )}
+                    >
+                      <span className="text-base leading-none">{parent.emoji}</span>
+                      <span className="flex-1 truncate">{parent.name}</span>
+                    </Link>
+                    {kids.map((kid) => (
+                      <Link
+                        key={kid.id}
+                        to={`/history?category=${encodeURIComponent(kid.name)}`}
+                        className={cn(
+                          'flex items-center gap-2 rounded-md py-1.5 pr-3 pl-9 text-sm transition',
+                          catActive(kid.name) ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        )}
+                      >
+                        <span className="text-sm leading-none">{kid.emoji}</span>
+                        <span className="flex-1 truncate">{kid.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                );
+              })}
+            </>
+          )}
         </nav>
       </aside>
 
@@ -258,7 +128,7 @@ export default function Layout() {
       {/* Mobile bottom nav */}
       <nav className="lg:hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40">
         <div className="flex items-center justify-around h-16 px-2">
-          {mobileItems.map((item) => (
+          {navItems.map((item) => (
             <NavBtn key={item.to} {...item} active={isActive(item.to)} />
           ))}
         </div>
