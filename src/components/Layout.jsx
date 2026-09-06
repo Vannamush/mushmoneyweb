@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Home, History, Tag, CreditCard, Receipt, PiggyBank } from 'lucide-react';
+import { Home, History, Tag, CreditCard, PiggyBank } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCategories } from '@/lib/api';
 
@@ -10,7 +10,6 @@ const navItems = [
   { to: '/categories', label: 'Tags', icon: Tag },
   { to: '/pay', label: 'Pay', icon: CreditCard },
   { to: '/savings', label: 'Savings', icon: PiggyBank },
-  { to: '/bills', label: 'Bills', icon: Receipt },
 ];
 
 export default function Layout() {
@@ -30,7 +29,6 @@ export default function Layout() {
       return true;
     }
     if (p === '/history') return !location.search.includes('category=');
-    if (p === '/bills') return !location.search.includes('name=') && !location.search.includes('group=');
     return true;
   };
 

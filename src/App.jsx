@@ -17,7 +17,6 @@ import Import from '@/pages/Import';
 import Categories from '@/pages/Categories';
 import Settings from '@/pages/Settings';
 import Pay from '@/pages/Pay';
-import Bills from '@/pages/Bills';
 import Savings from '@/pages/Savings';
 import Section from '@/pages/Section';
 import BookLayout from '@/components/book/BookLayout';
@@ -70,7 +69,6 @@ const AuthenticatedApp = () => {
           <Route path="/categories" element={<Categories />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/pay" element={<Pay />} />
-          <Route path="/bills" element={<Bills />} />
           <Route path="/savings" element={<Savings />} />
           <Route path="/section" element={<Section />} />
         </Route>

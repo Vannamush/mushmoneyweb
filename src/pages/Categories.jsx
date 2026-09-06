@@ -3,22 +3,41 @@ import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus } from 'lucide-react';
-import { useCategories, useRefresh } from '@/lib/api';
+import { Plus, Receipt } from 'lucide-react';
+import { useCategories, useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import CategoryRow from '@/components/CategoryRow';
+import BillRow from '@/components/BillRow';
+import BillDialog from '@/components/BillDialog';
 
 const COLORS = ['#6366f1', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6', '#8b5cf6', '#3b82f6', '#10b981', '#f97316', '#06b6d4', '#e11d48', '#84cc16'];
 const EMOJIS = ['🏠', '🍔', '⛽', '🎉', '🧸', '📺', '🛒', '💊', '✈️', '☕', '👕', '💻', '🎁', '🚗', '🐾', '📚'];
 
 export default function Categories() {
   const { data: categories = [] } = useCategories();
-  const refresh = useRefresh(['categories']);
+  const { data: bills = [] } = useBills();
+  const refresh = useRefresh(['categories', 'bills']);
   const [editing, setEditing] = useState(null);
   const [adding, setAdding] = useState(null);
+  const [billEditing, setBillEditing] = useState(null);
+  const [billAdding, setBillAdding] = useState(false);
+  const [paying, setPaying] = useState(null);
+  const [error, setError] = useState('');
 
   const topLevel = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
   const childrenOf = (parentId) => categories.filter((c) => c.parent_id === parentId);
+  const groupNames = (parent) => [parent.name, ...childrenOf(parent.id).map((c) => c.name)];
+
+  const billsFor = (parent) => bills.filter((b) => groupNames(parent).includes(b.name));
+  const otherBills = useMemo(() => {
+    const allNames = topLevel.flatMap(groupNames);
+    const seen = new Set();
+    return bills.filter((b) => {
+      if (seen.has(b.name)) return false;
+      seen.add(b.name);
+      return !allNames.includes(b.name);
+    });
+  }, [bills, topLevel]);
 
   const del = async (c) => {
     const subs = childrenOf(c.id);
@@ -31,24 +50,76 @@ export default function Categories() {
     refresh();
   };
 
+  const delBill = async (b) => {
+    if (!confirm(`Delete "${b.name}"?`)) return;
+    await base44.entities.Bill.delete(b.id);
+    refresh();
+  };
+
+  const pay = async (b) => {
+    if (window.self !== window.top) {
+      alert('Checkout only works from the published app. Open the app in a new tab to pay.');
+      return;
+    }
+    setError('');
+    setPaying(b.id);
+    try {
+      const res = await base44.functions.invoke('createCheckout', {
+        amount: b.amount,
+        name: b.name,
+        mode: 'subscription',
+        interval: b.interval || 'month',
+      });
+      if (res.data?.url) {
+        await base44.entities.Bill.update(b.id, { last_paid: new Date().toISOString().slice(0, 10) });
+        refresh();
+        window.location.href = res.data.url;
+        return;
+      }
+      setError(res.data?.error || 'Could not start checkout. Try again.');
+    } catch (e) {
+      setError('Could not start checkout. Try again.');
+    }
+    setPaying(null);
+  };
+
   return (
-    <div className="px-5 pt-6">
+    <div className="px-5 pt-6 pb-10">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">Tags</h1>
-        <button onClick={() => setAdding({ parentId: null })} className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-          <Plus className="h-5 w-5" />
-        </button>
+        <h1 className="text-xl font-semibold">Tags & Bills</h1>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setBillAdding(true)} className="h-10 px-3 rounded-full bg-muted text-foreground flex items-center gap-1.5 text-sm font-medium">
+            <Receipt className="h-4 w-4" /> Bill
+          </button>
+          <button onClick={() => setAdding({ parentId: null })} className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+            <Plus className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
-      <div className="space-y-2">
+      {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
+
+      <div className="space-y-4">
         {topLevel.map((c) => (
           <div key={c.id} className="space-y-2">
             <CategoryRow category={c} onAddSub={(parent) => setAdding({ parentId: parent.id })} onEdit={setEditing} onDelete={del} />
             {childrenOf(c.id).map((sub) => (
               <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />
             ))}
+            {billsFor(c).map((b) => (
+              <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
+            ))}
           </div>
         ))}
+
+        {otherBills.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground px-1">Other bills</p>
+            {otherBills.map((b) => (
+              <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
+            ))}
+          </div>
+        )}
       </div>
 
       {adding && (
@@ -65,6 +136,13 @@ export default function Categories() {
           categories={categories}
           onClose={() => setEditing(null)}
           onSaved={() => { setEditing(null); refresh(); }}
+        />
+      )}
+      {(billAdding || billEditing) && (
+        <BillDialog
+          bill={billEditing}
+          onClose={() => { setBillAdding(false); setBillEditing(null); }}
+          onSaved={() => { setBillAdding(false); setBillEditing(null); refresh(); }}
         />
       )}
     </div>
