@@ -2,7 +2,6 @@ import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Home, History, Tag, CreditCard, PiggyBank } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useCategories } from '@/lib/api';
 
 const navItems = [
   { to: '/', label: 'Home', icon: Home },
@@ -14,40 +13,7 @@ const navItems = [
 
 export default function Layout() {
   const location = useLocation();
-  const { data: categories = [] } = useCategories();
-
-  const isActive = (path) => {
-    const [p, q] = path.split('?');
-    const baseMatch = p === '/' ? location.pathname === '/' : location.pathname.startsWith(p);
-    if (!baseMatch) return false;
-    if (q) {
-      const linkParams = new URLSearchParams(q);
-      const currentParams = new URLSearchParams(location.search);
-      for (const [k, v] of linkParams) {
-        if (currentParams.get(k) !== v) return false;
-      }
-      return true;
-    }
-    if (p === '/history') return !location.search.includes('category=');
-    return true;
-  };
-
-  const parents = categories
-    .filter((c) => !c.parent_id)
-    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-  const childrenOf = (pid) => categories
-    .filter((c) => c.parent_id === pid)
-    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-
-  const sectionTarget = (parent, children) => {
-    const cats = children.map((c) => c.name).join('|');
-    return `/section?name=${encodeURIComponent(parent.name)}&category=${encodeURIComponent(cats)}`;
-  };
-
-  const catActive = (name) => {
-    const currentParams = new URLSearchParams(location.search);
-    return location.pathname === '/history' && currentParams.get('category') === name;
-  };
+  const isActive = (path) => (path === '/' ? location.pathname === '/' : location.pathname.startsWith(path));
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -74,46 +40,6 @@ export default function Layout() {
               </Link>
             );
           })}
-
-          {parents.length > 0 && (
-            <>
-              <div className="pt-4">
-                <div className="mx-3 border-t border-border" />
-              </div>
-              {parents.map((parent) => {
-                const kids = childrenOf(parent.id);
-                const parentTarget = sectionTarget(parent, kids);
-                const parentActive = isActive(parentTarget);
-                return (
-                  <div key={parent.id} className="pt-2 space-y-0.5">
-                    <Link
-                      to={parentTarget}
-                      className={cn(
-                        'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition',
-                        parentActive ? 'bg-primary text-primary-foreground font-medium' : 'text-foreground font-medium hover:bg-muted'
-                      )}
-                    >
-                      <span className="text-base leading-none">{parent.emoji}</span>
-                      <span className="flex-1 truncate">{parent.name}</span>
-                    </Link>
-                    {kids.map((kid) => (
-                      <Link
-                        key={kid.id}
-                        to={`/history?category=${encodeURIComponent(kid.name)}`}
-                        className={cn(
-                          'flex items-center gap-2 rounded-md py-1.5 pr-3 pl-9 text-sm transition',
-                          catActive(kid.name) ? 'bg-primary text-primary-foreground font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                        )}
-                      >
-                        <span className="text-sm leading-none">{kid.emoji}</span>
-                        <span className="flex-1 truncate">{kid.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                );
-              })}
-            </>
-          )}
         </nav>
       </aside>
 
