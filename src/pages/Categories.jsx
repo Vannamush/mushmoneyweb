@@ -66,8 +66,16 @@ export default function Categories() {
     setError('');
     setPaying(b.id);
     try {
+      let amount = b.amount > 0
+        ? b.amount
+        : (categories.find((c) => norm(c.name) === norm(b.name))?.budget || 0);
+      if (!amount) {
+        const input = prompt(`Enter amount to pay for "${b.name}":`);
+        amount = Number(input);
+        if (!input || !(amount > 0)) { setPaying(null); return; }
+      }
       const res = await base44.functions.invoke('createCheckout', {
-        amount: b.amount,
+        amount,
         name: b.name,
         mode: 'subscription',
         interval: b.interval || 'month',
