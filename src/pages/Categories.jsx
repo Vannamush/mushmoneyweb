@@ -116,7 +116,9 @@ export default function Categories() {
 
         {otherBills.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground px-1">Other bills</p>
+            <p className="text-sm font-medium text-muted-foreground px-1 flex items-center gap-1.5">
+              <Receipt className="h-4 w-4" /> Other bills
+            </p>
             {otherBills.map((b) => (
               <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
             ))}
