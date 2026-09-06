@@ -56,6 +56,28 @@ export default function Categories() {
     refresh();
   };
 
+  const payBill = async (bill) => {
+    if (window.self !== window.top) {
+      alert('Checkout only works from the published app. Open the app in a new tab to pay.');
+      return;
+    }
+    try {
+      const res = await base44.functions.invoke('createCheckout', {
+        amount: bill.amount,
+        name: bill.name,
+        mode: 'subscription',
+        interval: bill.interval || 'month',
+      });
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      } else {
+        alert(res.data?.error || 'Could not start checkout.');
+      }
+    } catch (e) {
+      alert('Could not start checkout.');
+    }
+  };
+
   const delOtherBills = async () => {
     if (!confirm(`Delete all ${otherBills.length} "Other bills"? This cannot be undone.`)) return;
     await Promise.all(otherBills.map((b) => base44.entities.Bill.delete(b.id)));
@@ -79,7 +101,7 @@ export default function Categories() {
             <CategoryRow category={c} onAddSub={(parent) => setAdding({ parentId: parent.id })} onEdit={setEditing} onDelete={del} />
             {childrenOf(c.id).map((sub) => {
               const bill = bills.find((b) => norm(b.name) === norm(sub.name));
-              if (bill) return <TagBillRow key={sub.id} category={sub} bill={bill} onEdit={setBillEditing} onDelete={delBill} />;
+              if (bill) return <TagBillRow key={sub.id} category={sub} bill={bill} onEdit={setBillEditing} onDelete={delBill} onPay={payBill} />;
               return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />;
             })}
             {bills.filter((b) => norm(b.name) === norm(c.name)).map((b) => (
