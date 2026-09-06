@@ -42,7 +42,7 @@ export default function BookLayout() {
       </aside>
 
       {/* Mobile header */}
-      <header className="lg:hidden sticky top-0 z-40 bg-primary text-primary-foreground border-b-4 border-brand">
+      <header className="lg:hidden sticky top-0 z-40 bg-primary text-primary-foreground border-b-4 border-brand" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-2xl mx-auto px-5 py-3 text-center">
           <h1 className="font-display text-3xl tracking-[0.18em] leading-none">{SHOP_NAME}</h1>
           <p className="text-[10px] uppercase tracking-[0.3em] opacity-70 mt-1">{SHOP_TAGLINE}</p>
@@ -50,13 +50,13 @@ export default function BookLayout() {
       </header>
 
       <div className="lg:pl-64">
-        <main className="max-w-2xl mx-auto pb-24 lg:pb-12">
+        <main className="max-w-2xl mx-auto pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-12">
           <Outlet />
         </main>
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-card border-t border-border">
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-card border-t border-border" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-2xl mx-auto flex h-16">
           {items.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} className="flex-1 flex flex-col items-center justify-center gap-1">

@@ -136,10 +136,10 @@ export default function Categories() {
                 <p className="font-medium truncate">Other bills</p>
                 <p className="text-xs text-muted-foreground">{otherBills.length} bill{otherBills.length === 1 ? '' : 's'}</p>
               </div>
-              <button onClick={() => setBillAdding(true)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0" title="Add bill">
+              <button onClick={() => setBillAdding(true)} className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0" title="Add bill">
                 <Plus className="h-4 w-4 text-muted-foreground" />
               </button>
-              <button onClick={delOtherBills} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0" title="Delete all">
+              <button onClick={delOtherBills} className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0" title="Delete all">
                 <Trash2 className="h-4 w-4 text-red-500" />
               </button>
             </div>

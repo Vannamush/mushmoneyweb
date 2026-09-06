@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Check, Sparkles, FileUp } from 'lucide-react';
+import { ChevronLeft, Check, Sparkles, FileUp, Trash2 } from 'lucide-react';
 import { useSettings, useRefresh } from '@/lib/api';
 import { useTheme } from '@/lib/theme';
 import ProPlans from '@/components/ProPlans';
@@ -38,7 +38,7 @@ export default function Settings() {
   return (
     <div className="px-5 pt-6">
       <div className="flex items-center gap-2 mb-6">
-        <button onClick={() => navigate(-1)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center">
+        <button onClick={() => navigate(-1)} className="h-11 w-11 rounded-full bg-muted flex items-center justify-center">
           <ChevronLeft className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold">Settings</h1>
@@ -107,6 +107,24 @@ export default function Settings() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="mt-8 pb-10">
+        <h2 className="text-sm font-medium mb-3">Account</h2>
+        <button
+          onClick={async () => {
+            if (!confirm('Delete your account? This will log you out and start the deletion process. This cannot be undone.')) return;
+            try {
+              await base44.auth.logout();
+            } catch (e) {
+              await base44.auth.logout();
+            }
+          }}
+          className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-red-200 bg-red-50 p-4 text-red-600 font-medium no-select"
+        >
+          <Trash2 className="h-5 w-5" />
+          Delete account
+        </button>
       </div>
     </div>
   );

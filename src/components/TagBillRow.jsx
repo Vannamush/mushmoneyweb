@@ -5,7 +5,7 @@ import { formatCurrency } from '@/lib/money';
 // A sub-tag that also has a matching recurring bill — rendered with a pay button.
 export default function TagBillRow({ category, bill, onEdit, onDelete, onPay }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3" style={{ marginLeft: 20 }}>
+    <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3 no-select" style={{ marginLeft: 20 }}>
       <div className="h-10 w-10 rounded-full flex items-center justify-center text-lg shrink-0" style={{ backgroundColor: category.color + '22' }}>
         {category.emoji}
       </div>
@@ -16,13 +16,13 @@ export default function TagBillRow({ category, bill, onEdit, onDelete, onPay }) 
           {bill.last_paid ? ` · last charged ${bill.last_paid}` : ''}
         </p>
       </div>
-      <button onClick={() => onPay(bill)} className="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0" title="Pay">
+      <button onClick={() => onPay(bill)} className="h-11 w-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0" title="Pay">
         <CreditCard className="h-4 w-4" />
       </button>
-      <button onClick={() => onEdit(bill)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+      <button onClick={() => onEdit(bill)} className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0">
         <Pencil className="h-4 w-4 text-muted-foreground" />
       </button>
-      <button onClick={() => onDelete(bill)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+      <button onClick={() => onDelete(bill)} className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0">
         <Trash2 className="h-4 w-4 text-red-500" />
       </button>
     </div>

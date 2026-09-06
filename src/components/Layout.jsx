@@ -44,13 +44,13 @@ export default function Layout() {
       </aside>
 
       <div className="lg:pl-64">
-        <main className="mx-auto max-w-2xl pb-28 lg:pb-12">
+        <main className="mx-auto max-w-2xl pb-[calc(7rem+env(safe-area-inset-bottom))] lg:pb-12">
           <Outlet />
         </main>
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40">
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-card border-t border-border z-40" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-center justify-around h-16 px-2">
           {navItems.map((item) => (
             <NavBtn key={item.to} {...item} active={isActive(item.to)} />
