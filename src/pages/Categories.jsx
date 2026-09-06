@@ -116,9 +116,18 @@ export default function Categories() {
 
         {otherBills.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground px-1 flex items-center gap-1.5">
-              <Receipt className="h-4 w-4" /> Other bills
-            </p>
+            <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3">
+              <div className="h-10 w-10 rounded-full flex items-center justify-center shrink-0 bg-muted">
+                <Receipt className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium truncate">Other bills</p>
+                <p className="text-xs text-muted-foreground">{otherBills.length} bill{otherBills.length === 1 ? '' : 's'}</p>
+              </div>
+              <button onClick={() => setBillAdding(true)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0" title="Add bill">
+                <Plus className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
             {otherBills.map((b) => (
               <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
             ))}
