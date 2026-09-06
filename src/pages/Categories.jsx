@@ -8,6 +8,7 @@ import { useCategories, useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import CategoryRow from '@/components/CategoryRow';
 import BillRow from '@/components/BillRow';
+import TagBillRow from '@/components/TagBillRow';
 import BillDialog from '@/components/BillDialog';
 
 const COLORS = ['#6366f1', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6', '#8b5cf6', '#3b82f6', '#10b981', '#f97316', '#06b6d4', '#e11d48', '#84cc16'];
@@ -28,7 +29,6 @@ export default function Categories() {
   const childrenOf = (parentId) => categories.filter((c) => c.parent_id === parentId);
   const groupNames = (parent) => [parent.name, ...childrenOf(parent.id).map((c) => c.name)];
 
-  const billsFor = (parent) => bills.filter((b) => groupNames(parent).includes(b.name));
   const otherBills = useMemo(() => {
     const allNames = topLevel.flatMap(groupNames);
     const seen = new Set();
@@ -103,10 +103,12 @@ export default function Categories() {
         {topLevel.map((c) => (
           <div key={c.id} className="space-y-2">
             <CategoryRow category={c} onAddSub={(parent) => setAdding({ parentId: parent.id })} onEdit={setEditing} onDelete={del} />
-            {childrenOf(c.id).map((sub) => (
-              <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />
-            ))}
-            {billsFor(c).map((b) => (
+            {childrenOf(c.id).map((sub) => {
+              const bill = bills.find((b) => b.name === sub.name);
+              if (bill) return <TagBillRow key={sub.id} category={sub} bill={bill} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />;
+              return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />;
+            })}
+            {bills.filter((b) => b.name === c.name).map((b) => (
               <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
             ))}
           </div>
