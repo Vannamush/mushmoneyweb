@@ -6,7 +6,51 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, Check, Sparkles, FileUp, Trash2 } from 'lucide-react';
 import { useSettings, useRefresh } from '@/lib/api';
 import { useTheme } from '@/lib/theme';
+import { setCurrency } from '@/lib/money';
+import BottomSheetSelect from '@/components/BottomSheetSelect';
 import ProPlans from '@/components/ProPlans';
+
+const CURRENCIES = [
+  { code: 'USD', name: 'US Dollar' },
+  { code: 'EUR', name: 'Euro' },
+  { code: 'GBP', name: 'British Pound' },
+  { code: 'JPY', name: 'Japanese Yen' },
+  { code: 'CAD', name: 'Canadian Dollar' },
+  { code: 'AUD', name: 'Australian Dollar' },
+  { code: 'CHF', name: 'Swiss Franc' },
+  { code: 'CNY', name: 'Chinese Yuan' },
+  { code: 'INR', name: 'Indian Rupee' },
+  { code: 'BRL', name: 'Brazilian Real' },
+  { code: 'MXN', name: 'Mexican Peso' },
+  { code: 'ZAR', name: 'South African Rand' },
+  { code: 'NGN', name: 'Nigerian Naira' },
+  { code: 'KES', name: 'Kenyan Shilling' },
+  { code: 'GHS', name: 'Ghanaian Cedi' },
+  { code: 'AED', name: 'UAE Dirham' },
+  { code: 'SAR', name: 'Saudi Riyal' },
+  { code: 'SEK', name: 'Swedish Krona' },
+  { code: 'NOK', name: 'Norwegian Krone' },
+  { code: 'DKK', name: 'Danish Krone' },
+  { code: 'PLN', name: 'Polish Zloty' },
+  { code: 'CZK', name: 'Czech Koruna' },
+  { code: 'HUF', name: 'Hungarian Forint' },
+  { code: 'TRY', name: 'Turkish Lira' },
+  { code: 'ILS', name: 'Israeli Shekel' },
+  { code: 'KRW', name: 'South Korean Won' },
+  { code: 'SGD', name: 'Singapore Dollar' },
+  { code: 'HKD', name: 'Hong Kong Dollar' },
+  { code: 'NZD', name: 'New Zealand Dollar' },
+  { code: 'THB', name: 'Thai Baht' },
+  { code: 'IDR', name: 'Indonesian Rupiah' },
+  { code: 'PHP', name: 'Philippine Peso' },
+  { code: 'MYR', name: 'Malaysian Ringgit' },
+  { code: 'VND', name: 'Vietnamese Dong' },
+  { code: 'EGP', name: 'Egyptian Pound' },
+  { code: 'MAD', name: 'Moroccan Dirham' },
+  { code: 'TND', name: 'Tunisian Dinar' },
+  { code: 'XOF', name: 'West African CFA Franc' },
+  { code: 'XAF', name: 'Central African CFA Franc' },
+].map((c) => ({ value: c.code, label: `${c.code} · ${c.name}` }));
 
 const THEMES = [
   { id: 'minimal', name: 'Clean & Minimal', desc: 'Airy and light', preview: 'bg-white border border-border' },
@@ -20,6 +64,7 @@ export default function Settings() {
   const refresh = useRefresh(['settings']);
   const { theme, setTheme } = useTheme();
   const [budget, setBudget] = useState(settings ? String(settings.budget) : '6000');
+  const [currency, setCurrencyState] = useState(settings?.currency || 'USD');
   const [saving, setSaving] = useState(false);
 
   const isPro = settings?.subscription_status === 'active';
@@ -33,6 +78,13 @@ export default function Settings() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const changeCurrency = async (code) => {
+    setCurrencyState(code);
+    setCurrency(code);
+    if (settings?.id) await base44.entities.Settings.update(settings.id, { currency: code });
+    refresh();
   };
 
   return (
@@ -87,6 +139,18 @@ export default function Settings() {
             Save
           </Button>
         </div>
+      </div>
+
+      <div className="mb-8">
+        <h2 className="text-sm font-medium mb-3">Currency</h2>
+        <BottomSheetSelect
+          value={currency}
+          onChange={changeCurrency}
+          placeholder="Choose currency"
+          options={CURRENCIES}
+          triggerClassName="h-12 text-base"
+        />
+        <p className="text-xs text-muted-foreground mt-2">Amounts across the app are shown in this currency.</p>
       </div>
 
       <div>

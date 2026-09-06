@@ -17,6 +17,11 @@
       "title": "Theme",
       "default": "minimal"
     },
+    "currency": {
+      "type": "string",
+      "title": "Currency code (ISO 4217)",
+      "default": "USD"
+    },
     "subscription_status": {
       "type": "string",
       "enum": [

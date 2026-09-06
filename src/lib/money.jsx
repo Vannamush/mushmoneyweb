@@ -1,8 +1,16 @@
+let currentCurrency = 'USD';
+
+export const setCurrency = (code) => {
+  if (code) currentCurrency = code;
+};
+
+export const getCurrency = () => currentCurrency;
+
 export const formatCurrency = (n) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Number(n) || 0);
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: currentCurrency, maximumFractionDigits: 0 }).format(Number(n) || 0);
 
 export const formatCurrencyExact = (n) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(n) || 0);
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: currentCurrency }).format(Number(n) || 0);
 
 export const daysInMonth = (d = new Date()) => new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
 

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Home, History, Tag, CreditCard, PiggyBank } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSettings } from '@/lib/api';
+import { setCurrency } from '@/lib/money';
 
 const navItems = [
   { to: '/', label: 'Home', icon: Home },
@@ -15,6 +17,11 @@ const navItems = [
 export default function Layout() {
   const location = useLocation();
   const isActive = (path) => (path === '/' ? location.pathname === '/' : location.pathname.startsWith(path));
+  const { data: settings } = useSettings();
+
+  useEffect(() => {
+    if (settings?.currency) setCurrency(settings.currency);
+  }, [settings?.currency]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
