@@ -117,8 +117,8 @@ export default function Categories() {
         {otherBills.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3">
-              <div className="h-10 w-10 rounded-full flex items-center justify-center shrink-0 bg-muted">
-                <Receipt className="h-5 w-5 text-muted-foreground" />
+              <div className="h-10 w-10 rounded-full flex items-center justify-center text-lg shrink-0" style={{ backgroundColor: '#f59e0b22' }}>
+                🧾
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">Other bills</p>
