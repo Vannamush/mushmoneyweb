@@ -1,12 +1,14 @@
 import React from 'react';
 import { Trash2, Pencil, CreditCard } from 'lucide-react';
 import { formatCurrency } from '@/lib/money';
+import { getBillIcon } from '@/lib/billIcon';
 
 export default function BillRow({ bill, onPay, paying, onEdit, onDelete }) {
+  const icon = getBillIcon(bill.name);
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3" style={{ marginLeft: 20 }}>
-      <div className="h-10 w-10 rounded-full flex items-center justify-center text-lg shrink-0" style={{ backgroundColor: '#f59e0b22' }}>
-        🧾
+      <div className="h-10 w-10 rounded-full flex items-center justify-center text-lg shrink-0" style={{ backgroundColor: icon.color + '22' }}>
+        {icon.emoji}
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium truncate text-sm text-muted-foreground">{bill.name}</p>
