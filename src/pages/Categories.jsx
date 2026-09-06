@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -67,6 +67,8 @@ export default function Categories() {
         name: bill.name,
         mode: 'subscription',
         interval: bill.interval || 'month',
+        success_url: `${window.location.origin}/categories?bill_paid=${bill.id}`,
+        cancel_url: `${window.location.origin}/categories`,
       });
       if (res.data?.url) {
         window.location.href = res.data.url;
@@ -77,6 +79,20 @@ export default function Categories() {
       alert('Could not start checkout.');
     }
   };
+
+  // After a successful checkout redirect, mark the paid bill's last charged date.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paidId = params.get('bill_paid');
+    if (!paidId) return;
+    const today = new Date().toISOString().slice(0, 10);
+    base44.entities.Bill.update(paidId, { last_paid: today }).finally(() => {
+      refresh();
+      const url = new URL(window.location.href);
+      url.searchParams.delete('bill_paid');
+      window.history.replaceState({}, '', url);
+    });
+  }, []);
 
   const delOtherBills = async () => {
     if (!confirm(`Delete all ${otherBills.length} "Other bills"? This cannot be undone.`)) return;
