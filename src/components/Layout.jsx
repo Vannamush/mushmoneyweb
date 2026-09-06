@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Home, History, Tag, CreditCard, PiggyBank } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
   { to: '/', label: 'Home', icon: Home },
@@ -44,8 +45,18 @@ export default function Layout() {
       </aside>
 
       <div className="lg:pl-64">
-        <main className="mx-auto max-w-2xl pb-[calc(7rem+env(safe-area-inset-bottom))] lg:pb-12">
-          <Outlet />
+        <main className="mx-auto max-w-2xl pt-[env(safe-area-inset-top)] pb-[calc(7rem+env(safe-area-inset-bottom))] lg:pb-12">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
 

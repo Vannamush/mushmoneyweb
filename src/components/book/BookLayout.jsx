@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Users, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SHOP_NAME, SHOP_TAGLINE } from '@/lib/book';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const items = [
   { to: '/book', label: 'Clients', icon: Users },
@@ -51,7 +52,17 @@ export default function BookLayout() {
 
       <div className="lg:pl-64">
         <main className="max-w-2xl mx-auto pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-12">
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
 

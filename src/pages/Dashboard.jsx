@@ -6,9 +6,13 @@ import { formatCurrency, formatCurrencyExact, daysLeftInMonth, isSameMonth } fro
 import ProgressBar from '@/components/ProgressBar';
 import DonutChart from '@/components/DonutChart';
 import ExpenseRow from '@/components/ExpenseRow';
+import PullToRefresh from '@/components/PullToRefresh';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const qc = useQueryClient();
+  const refresh = () => qc.refetchQueries({ type: 'active' });
   const { data: expenses = [] } = useExpenses();
   const { data: categories = [] } = useCategories();
   const { data: settings } = useSettings();
@@ -48,6 +52,7 @@ export default function Dashboard() {
   const pct = budget > 0 ? (totalSpent / budget) * 100 : 0;
 
   return (
+    <PullToRefresh onRefresh={refresh}>
     <div className="px-5 pt-6">
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -139,5 +144,6 @@ export default function Dashboard() {
         )}
       </div>
     </div>
+    </PullToRefresh>
   );
 }

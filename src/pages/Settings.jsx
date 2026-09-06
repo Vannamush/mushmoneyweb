@@ -113,7 +113,12 @@ export default function Settings() {
         <h2 className="text-sm font-medium mb-3">Account</h2>
         <button
           onClick={async () => {
-            if (!confirm('Delete your account? This will log you out and start the deletion process. This cannot be undone.')) return;
+            if (!confirm('Delete your account? This permanently removes your data and logs you out. This cannot be undone.')) return;
+            try {
+              await base44.functions.invoke('deleteAccount', {});
+            } catch (e) {
+              // continue to logout even if cleanup fails
+            }
             try {
               await base44.auth.logout();
             } catch (e) {

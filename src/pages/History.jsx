@@ -1,7 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useExpenses, useCategories, useSettings } from '@/lib/api';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import BottomSheetSelect from '@/components/BottomSheetSelect';
+import PullToRefresh from '@/components/PullToRefresh';
+import { useQueryClient } from '@tanstack/react-query';
 import ExpenseRow from '@/components/ExpenseRow';
 import ExpenseEditDialog from '@/components/ExpenseEditDialog';
 import { monthKey, formatCurrency } from '@/lib/money';
@@ -17,6 +19,8 @@ export default function History() {
   const [monthFilter, setMonthFilter] = useState('all');
   const [catFilter, setCatFilter] = useState('all');
   const [editing, setEditing] = useState(null);
+  const qc = useQueryClient();
+  const refresh = () => qc.refetchQueries({ type: 'active' });
 
   useEffect(() => {
     const name = searchParams.get('category');
@@ -60,23 +64,17 @@ export default function History() {
   }, [filtered]);
 
   return (
+    <PullToRefresh onRefresh={refresh}>
     <div className="px-5 pt-6">
       <h1 className="text-xl font-semibold mb-4">History</h1>
 
       <div className="mb-4">
-        <Select value={catFilter} onValueChange={setCatFilter}>
-          <SelectTrigger className="flex-1">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All categories</SelectItem>
-            {categories.map((c) => (
-              <SelectItem key={c.id} value={c.id}>
-                {c.emoji} {c.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <BottomSheetSelect
+          value={catFilter}
+          onChange={setCatFilter}
+          placeholder="Category"
+          options={[{ value: 'all', label: 'All categories' }, ...categories.map((c) => ({ value: c.id, label: `${c.emoji} ${c.name}` }))]}
+        />
       </div>
 
       {months.length === 0 ? (
@@ -163,5 +161,6 @@ export default function History() {
 
       {editing && <ExpenseEditDialog expense={editing} categories={categories} onClose={() => setEditing(null)} />}
     </div>
+    </PullToRefresh>
   );
 }
