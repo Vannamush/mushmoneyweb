@@ -22,8 +22,6 @@ export default function Categories() {
   const [adding, setAdding] = useState(null);
   const [billEditing, setBillEditing] = useState(null);
   const [billAdding, setBillAdding] = useState(false);
-  const [paying, setPaying] = useState(null);
-  const [error, setError] = useState('');
 
   const norm = (s) => (s || '').trim().toLowerCase();
   const topLevel = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
@@ -58,41 +56,6 @@ export default function Categories() {
     refresh();
   };
 
-  const pay = async (b) => {
-    if (window.self !== window.top) {
-      alert('Checkout only works from the published app. Open the app in a new tab to pay.');
-      return;
-    }
-    setError('');
-    setPaying(b.id);
-    try {
-      let amount = b.amount > 0
-        ? b.amount
-        : (categories.find((c) => norm(c.name) === norm(b.name))?.budget || 0);
-      if (!amount) {
-        const input = prompt(`Enter amount to pay for "${b.name}":`);
-        amount = Number(input);
-        if (!input || !(amount > 0)) { setPaying(null); return; }
-      }
-      const res = await base44.functions.invoke('createCheckout', {
-        amount,
-        name: b.name,
-        mode: 'subscription',
-        interval: b.interval || 'month',
-      });
-      if (res.data?.url) {
-        await base44.entities.Bill.update(b.id, { last_paid: new Date().toISOString().slice(0, 10) });
-        refresh();
-        window.location.href = res.data.url;
-        return;
-      }
-      setError(res.data?.error || 'Could not start checkout. Try again.');
-    } catch (e) {
-      setError('Could not start checkout. Try again.');
-    }
-    setPaying(null);
-  };
-
   return (
     <div className="px-5 pt-6 pb-10">
       <div className="flex items-center justify-between mb-4">
@@ -107,8 +70,6 @@ export default function Categories() {
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-500 mb-3 text-center">{error}</p>}
-
       <div className="space-y-4">
         {topLevel.map((c) => (
           <div key={c.id} className="space-y-2">
@@ -119,7 +80,7 @@ export default function Categories() {
               return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />;
             })}
             {bills.filter((b) => norm(b.name) === norm(c.name)).map((b) => (
-              <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
+              <BillRow key={b.id} bill={b} onEdit={setBillEditing} onDelete={delBill} />
             ))}
           </div>
         ))}
@@ -139,7 +100,7 @@ export default function Categories() {
               </button>
             </div>
             {otherBills.map((b) => (
-              <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
+              <BillRow key={b.id} bill={b} onEdit={setBillEditing} onDelete={delBill} />
             ))}
           </div>
         )}

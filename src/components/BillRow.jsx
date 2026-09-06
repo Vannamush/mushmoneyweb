@@ -1,9 +1,9 @@
 import React from 'react';
-import { Trash2, Pencil, CreditCard } from 'lucide-react';
+import { Trash2, Pencil } from 'lucide-react';
 import { formatCurrency } from '@/lib/money';
 import { getBillIcon } from '@/lib/billIcon';
 
-export default function BillRow({ bill, onPay, paying, onEdit, onDelete }) {
+export default function BillRow({ bill, onEdit, onDelete }) {
   const icon = getBillIcon(bill.name);
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3" style={{ marginLeft: 20 }}>
@@ -17,10 +17,6 @@ export default function BillRow({ bill, onPay, paying, onEdit, onDelete }) {
           {bill.last_paid ? ` · last charged ${bill.last_paid}` : ''}
         </p>
       </div>
-      <button onClick={() => onPay(bill)} disabled={paying === bill.id} className="h-9 px-3 rounded-full bg-primary text-primary-foreground text-xs font-medium flex items-center gap-1.5 shrink-0 disabled:opacity-60">
-        <CreditCard className="h-3.5 w-3.5" />
-        {paying === bill.id ? '…' : 'Pay'}
-      </button>
       <button onClick={() => onEdit(bill)} className="h-9 w-9 rounded-full bg-muted flex items-center justify-center shrink-0">
         <Pencil className="h-4 w-4 text-muted-foreground" />
       </button>
