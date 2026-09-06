@@ -8,6 +8,7 @@ import { useCategories, useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import CategoryRow from '@/components/CategoryRow';
 import BillRow from '@/components/BillRow';
+import TagBillRow from '@/components/TagBillRow';
 import BillDialog from '@/components/BillDialog';
 
 const COLORS = ['#6366f1', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6', '#8b5cf6', '#3b82f6', '#10b981', '#f97316', '#06b6d4', '#e11d48', '#84cc16'];
@@ -112,17 +113,14 @@ export default function Categories() {
         {topLevel.map((c) => (
           <div key={c.id} className="space-y-2">
             <CategoryRow category={c} onAddSub={(parent) => setAdding({ parentId: parent.id })} onEdit={setEditing} onDelete={del} />
-            {childrenOf(c.id).map((sub) => (
-              <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />
+            {childrenOf(c.id).map((sub) => {
+              const bill = bills.find((b) => norm(b.name) === norm(sub.name));
+              if (bill) return <TagBillRow key={sub.id} category={sub} bill={bill} onEdit={setBillEditing} onDelete={delBill} />;
+              return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />;
+            })}
+            {bills.filter((b) => norm(b.name) === norm(c.name)).map((b) => (
+              <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
             ))}
-            {bills
-              .filter((b) => {
-                const key = norm(b.name);
-                return key === norm(c.name) || childrenOf(c.id).some((sub) => norm(sub.name) === key);
-              })
-              .map((b) => (
-                <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
-              ))}
           </div>
         ))}
 
