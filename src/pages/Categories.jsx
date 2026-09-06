@@ -25,17 +25,19 @@ export default function Categories() {
   const [paying, setPaying] = useState(null);
   const [error, setError] = useState('');
 
+  const norm = (s) => (s || '').trim().toLowerCase();
   const topLevel = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
   const childrenOf = (parentId) => categories.filter((c) => c.parent_id === parentId);
   const groupNames = (parent) => [parent.name, ...childrenOf(parent.id).map((c) => c.name)];
 
   const otherBills = useMemo(() => {
-    const allNames = topLevel.flatMap(groupNames);
+    const allNames = topLevel.flatMap(groupNames).map(norm);
     const seen = new Set();
     return bills.filter((b) => {
-      if (seen.has(b.name)) return false;
-      seen.add(b.name);
-      return !allNames.includes(b.name);
+      const key = norm(b.name);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return !allNames.includes(key);
     });
   }, [bills, topLevel]);
 
@@ -104,11 +106,11 @@ export default function Categories() {
           <div key={c.id} className="space-y-2">
             <CategoryRow category={c} onAddSub={(parent) => setAdding({ parentId: parent.id })} onEdit={setEditing} onDelete={del} />
             {childrenOf(c.id).map((sub) => {
-              const bill = bills.find((b) => b.name === sub.name);
+              const bill = bills.find((b) => norm(b.name) === norm(sub.name));
               if (bill) return <TagBillRow key={sub.id} category={sub} bill={bill} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />;
               return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />;
             })}
-            {bills.filter((b) => b.name === c.name).map((b) => (
+            {bills.filter((b) => norm(b.name) === norm(c.name)).map((b) => (
               <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
             ))}
           </div>
