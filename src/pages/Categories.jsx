@@ -93,31 +93,6 @@ export default function Categories() {
     setPaying(null);
   };
 
-  const payCategory = async (c) => {
-    if (window.self !== window.top) {
-      alert('Checkout only works from the published app. Open the app in a new tab to pay.');
-      return;
-    }
-    setError('');
-    const key = 'cat:' + c.id;
-    setPaying(key);
-    try {
-      const res = await base44.functions.invoke('createCheckout', {
-        amount: c.budget,
-        name: c.name,
-        mode: 'payment',
-      });
-      if (res.data?.url) {
-        window.location.href = res.data.url;
-        return;
-      }
-      setError(res.data?.error || 'Could not start checkout. Try again.');
-    } catch (e) {
-      setError('Could not start checkout. Try again.');
-    }
-    setPaying(null);
-  };
-
   return (
     <div className="px-5 pt-6 pb-10">
       <div className="flex items-center justify-between mb-4">
@@ -141,7 +116,7 @@ export default function Categories() {
             {childrenOf(c.id).map((sub) => {
               const bill = bills.find((b) => norm(b.name) === norm(sub.name));
               if (bill) return <TagBillRow key={sub.id} category={sub} bill={bill} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />;
-              return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} onPay={payCategory} paying={paying === 'cat:' + sub.id} />;
+              return <CategoryRow key={sub.id} category={sub} depth={1} onEdit={setEditing} onDelete={del} />;
             })}
             {bills.filter((b) => norm(b.name) === norm(c.name)).map((b) => (
               <BillRow key={b.id} bill={b} paying={paying} onPay={pay} onEdit={setBillEditing} onDelete={delBill} />
