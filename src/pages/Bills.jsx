@@ -5,35 +5,43 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Plus, Receipt } from 'lucide-react';
-import { useBills, useRefresh } from '@/lib/api';
+import { useBills, useCategories, useRefresh } from '@/lib/api';
 import SelectorHeader from '@/components/SelectorHeader';
 import BillRow from '@/components/BillRow';
-
-const GROUPS = [
-  { key: 'housing', short: 'Housing & Essentials', names: ['Rent', 'Mortgage', 'Property Taxes', 'HOA Fees', 'Electricity', 'Water', 'Gas', 'Trash', 'Internet', 'Home Maintenance', 'Car'] },
-  { key: 'transportation', short: 'Transportation', names: ['Auto Insurance', 'Auto Loan', 'Lease Payment', 'Fuel', 'EV Charging', 'Public Transit', 'Rideshare', 'Maintenance', 'Parking'] },
-];
 
 export default function Bills() {
   const [params] = useSearchParams();
   const groupFilter = params.get('group');
   const { data: bills = [] } = useBills();
+  const { data: categories = [] } = useCategories();
   const refresh = useRefresh(['bills']);
   const [editing, setEditing] = useState(null);
   const [adding, setAdding] = useState(false);
   const [paying, setPaying] = useState(null);
   const [error, setError] = useState('');
 
+  const groups = useMemo(() => {
+    const parents = categories.filter((c) => !c.parent_id);
+    return parents.map((p) => ({
+      key: p.id,
+      short: p.name,
+      names: [p.name, ...categories.filter((c) => c.parent_id === p.id).map((c) => c.name)],
+    }));
+  }, [categories]);
+
   const { grouped, other } = useMemo(() => {
     const map = {};
     const other = [];
+    const seen = new Set();
     bills.forEach((b) => {
-      const g = GROUPS.find((grp) => grp.names.includes(b.name));
+      if (seen.has(b.name)) return;
+      seen.add(b.name);
+      const g = groups.find((grp) => grp.names.includes(b.name));
       if (g) (map[g.key] = map[g.key] || []).push(b);
       else other.push(b);
     });
     return { grouped: map, other };
-  }, [bills]);
+  }, [bills, groups]);
 
   const del = async (b) => {
     if (!confirm(`Delete "${b.name}"?`)) return;
@@ -68,7 +76,7 @@ export default function Bills() {
     setPaying(null);
   };
 
-  const groupsToShow = groupFilter ? GROUPS.filter((g) => g.key === groupFilter) : GROUPS;
+  const groupsToShow = groupFilter ? groups.filter((g) => g.key === groupFilter || g.short === groupFilter) : groups;
 
   const renderGroup = (key, title, items) => (
     <SelectorHeader key={key} icon={Receipt} title={title}>
