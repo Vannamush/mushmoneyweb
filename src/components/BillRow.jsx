@@ -1,10 +1,13 @@
 import React from 'react';
-import { Trash2, Pencil, CreditCard } from 'lucide-react';
+import { Trash2, Pencil, CreditCard, Receipt } from 'lucide-react';
 import { formatCurrency } from '@/lib/money';
 
 export default function BillRow({ bill, onPay, paying, onEdit, onDelete }) {
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-3" style={{ marginLeft: 20 }}>
+      <div className="h-10 w-10 rounded-full flex items-center justify-center shrink-0 bg-muted">
+        <Receipt className="h-5 w-5 text-muted-foreground" />
+      </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium truncate text-sm text-muted-foreground">{bill.name}</p>
         <p className="text-xs text-muted-foreground">
