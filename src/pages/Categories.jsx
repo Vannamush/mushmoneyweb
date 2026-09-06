@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus, Receipt } from 'lucide-react';
+import { Receipt } from 'lucide-react';
 import { useCategories, useBills, useRefresh } from '@/lib/api';
 import { formatCurrency } from '@/lib/money';
 import CategoryRow from '@/components/CategoryRow';
@@ -63,9 +63,6 @@ export default function Categories() {
         <div className="flex items-center gap-2">
           <button onClick={() => setBillAdding(true)} className="h-10 px-3 rounded-full bg-muted text-foreground flex items-center gap-1.5 text-sm font-medium">
             <Receipt className="h-4 w-4" /> Bill
-          </button>
-          <button onClick={() => setAdding({ parentId: null })} className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-            <Plus className="h-5 w-5" />
           </button>
         </div>
       </div>
