@@ -29,7 +29,7 @@ export default function Layout() {
       <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 border-r border-border bg-card flex-col z-40">
         <div className="px-5 py-6 border-b border-border">
           <p className="text-sm text-muted-foreground">Mushmoney</p>
-          <h1 className="text-lg font-semibold">Budget Tracker</h1>
+          <h1 className="text-lg font-semibold">{settings?.display_name || 'Budget Tracker'}</h1>
         </div>
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {

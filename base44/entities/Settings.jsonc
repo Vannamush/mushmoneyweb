@@ -22,6 +22,11 @@
       "title": "Currency code (ISO 4217)",
       "default": "USD"
     },
+    "display_name": {
+      "type": "string",
+      "title": "Display name",
+      "default": ""
+    },
     "subscription_status": {
       "type": "string",
       "enum": [

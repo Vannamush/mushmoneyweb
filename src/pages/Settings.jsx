@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Check, Sparkles, FileUp, Trash2 } from 'lucide-react';
+import { ChevronLeft, Check, Sparkles, FileUp, Trash2, Download } from 'lucide-react';
 import { useSettings, useRefresh } from '@/lib/api';
 import { useTheme } from '@/lib/theme';
 import { setCurrency } from '@/lib/money';
@@ -65,7 +65,9 @@ export default function Settings() {
   const { theme, setTheme } = useTheme();
   const [budget, setBudget] = useState(settings ? String(settings.budget) : '6000');
   const [currency, setCurrencyState] = useState(settings?.currency || 'USD');
+  const [name, setName] = useState(settings?.display_name || '');
   const [saving, setSaving] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const isPro = settings?.subscription_status === 'active';
   const justPaid = new URLSearchParams(window.location.search).get('payment') === 'success';
@@ -87,6 +89,42 @@ export default function Settings() {
     refresh();
   };
 
+  const saveName = async () => {
+    setSaving(true);
+    try {
+      if (settings?.id) await base44.entities.Settings.update(settings.id, { display_name: name.trim() });
+      refresh();
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const exportData = async () => {
+    setExporting(true);
+    try {
+      const [expenses, incomes, categories] = await Promise.all([
+        base44.entities.Expense.list('-date', 5000),
+        base44.entities.Income.list('-date', 5000),
+        base44.entities.Category.list('sort_order', 500),
+      ]);
+      const catName = (id) => categories.find((c) => c.id === id)?.name || '';
+      const rows = [['type', 'date', 'amount', 'category', 'note']];
+      expenses.forEach((e) => rows.push(['expense', e.date, e.amount, catName(e.category_id), e.note || '']));
+      incomes.forEach((i) => rows.push(['income', i.date, i.amount, i.source || '', i.note || '']));
+      const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+      const csv = rows.map((r) => r.map(esc).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mushmoney-export-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <div className="px-5 pt-6">
       <div className="flex items-center gap-2 mb-6">
@@ -101,6 +139,17 @@ export default function Settings() {
           Thanks for upgrading! Your Pro status will activate shortly.
         </div>
       )}
+
+      <div className="mb-8">
+        <h2 className="text-sm font-medium mb-3">Profile name</h2>
+        <div className="flex gap-2">
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className="h-12 text-base" />
+          <Button onClick={saveName} disabled={saving} className="h-12 px-6">
+            Save
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">Shown in the sidebar and across the app.</p>
+      </div>
 
       <div className="mb-8">
         <h2 className="text-sm font-medium mb-3">Mushmoney Pro</h2>
@@ -175,6 +224,17 @@ export default function Settings() {
 
       <div className="mt-8 pb-10">
         <h2 className="text-sm font-medium mb-3">Account</h2>
+        <button
+          onClick={exportData}
+          disabled={exporting}
+          className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left mb-3 disabled:opacity-50"
+        >
+          <Download className="h-5 w-5 text-muted-foreground shrink-0" />
+          <div className="flex-1">
+            <p className="font-medium">{exporting ? 'Preparing…' : 'Export data'}</p>
+            <p className="text-xs text-muted-foreground">Download all expenses and income as a CSV</p>
+          </div>
+        </button>
         <button
           onClick={async () => {
             if (!confirm('Delete your account? This permanently removes your data and logs you out. This cannot be undone.')) return;
