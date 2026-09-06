@@ -66,6 +66,7 @@ export default function Settings() {
   const [budget, setBudget] = useState(settings ? String(settings.budget) : '6000');
   const [currency, setCurrencyState] = useState(settings?.currency || 'USD');
   const [name, setName] = useState(settings?.display_name || '');
+  const [weekStart, setWeekStart] = useState(settings?.week_start || 'sunday');
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
 
@@ -86,6 +87,12 @@ export default function Settings() {
     setCurrencyState(code);
     setCurrency(code);
     if (settings?.id) await base44.entities.Settings.update(settings.id, { currency: code });
+    refresh();
+  };
+
+  const changeWeekStart = async (val) => {
+    setWeekStart(val);
+    if (settings?.id) await base44.entities.Settings.update(settings.id, { week_start: val });
     refresh();
   };
 
@@ -200,6 +207,21 @@ export default function Settings() {
           triggerClassName="h-12 text-base"
         />
         <p className="text-xs text-muted-foreground mt-2">Amounts across the app are shown in this currency.</p>
+      </div>
+
+      <div className="mb-8">
+        <h2 className="text-sm font-medium mb-3">Week starts on</h2>
+        <BottomSheetSelect
+          value={weekStart}
+          onChange={changeWeekStart}
+          placeholder="Choose start day"
+          options={[
+            { value: 'sunday', label: 'Sunday' },
+            { value: 'monday', label: 'Monday' },
+          ]}
+          triggerClassName="h-12 text-base"
+        />
+        <p className="text-xs text-muted-foreground mt-2">Used when grouping History by week.</p>
       </div>
 
       <div>

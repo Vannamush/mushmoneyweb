@@ -27,6 +27,15 @@
       "title": "Display name",
       "default": ""
     },
+    "week_start": {
+      "type": "string",
+      "enum": [
+        "sunday",
+        "monday"
+      ],
+      "title": "Week starts on",
+      "default": "sunday"
+    },
     "subscription_status": {
       "type": "string",
       "enum": [

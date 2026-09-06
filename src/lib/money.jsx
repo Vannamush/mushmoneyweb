@@ -22,3 +22,14 @@ export const isSameMonth = (dateStr, d = new Date()) => {
   const dt = new Date(dateStr);
   return dt.getFullYear() === d.getFullYear() && dt.getMonth() === d.getMonth();
 };
+
+// Returns the YYYY-MM-DD of the start of the week containing `d`,
+// based on whether weeks start Sunday or Monday.
+export const weekKey = (d, weekStart = 'sunday') => {
+  const date = new Date(d);
+  const day = date.getDay(); // 0 = Sun .. 6 = Sat
+  const offset = weekStart === 'monday' ? (day === 0 ? 6 : day - 1) : day;
+  const start = new Date(date);
+  start.setDate(date.getDate() - offset);
+  return start.toISOString().slice(0, 10);
+};

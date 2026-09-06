@@ -6,7 +6,7 @@ import PullToRefresh from '@/components/PullToRefresh';
 import { useQueryClient } from '@tanstack/react-query';
 import ExpenseRow from '@/components/ExpenseRow';
 import ExpenseEditDialog from '@/components/ExpenseEditDialog';
-import { monthKey, formatCurrency } from '@/lib/money';
+import { monthKey, formatCurrency, weekKey } from '@/lib/money';
 import { cn } from '@/lib/utils';
 
 export default function History() {
@@ -18,6 +18,7 @@ export default function History() {
   const [searchParams] = useSearchParams();
   const [monthFilter, setMonthFilter] = useState('all');
   const [catFilter, setCatFilter] = useState('all');
+  const [groupBy, setGroupBy] = useState('day');
   const [editing, setEditing] = useState(null);
   const qc = useQueryClient();
   const refresh = () => qc.refetchQueries({ type: 'active' });
@@ -57,11 +58,12 @@ export default function History() {
   const grouped = useMemo(() => {
     const map = {};
     filtered.forEach((e) => {
-      const key = new Date(e.date).toISOString().slice(0, 10);
+      const d = new Date(e.date);
+      const key = groupBy === 'week' ? weekKey(d, settings?.week_start) : d.toISOString().slice(0, 10);
       (map[key] = map[key] || []).push(e);
     });
     return Object.entries(map).sort((a, b) => b[0].localeCompare(a[0]));
-  }, [filtered]);
+  }, [filtered, groupBy, settings?.week_start]);
 
   return (
     <PullToRefresh onRefresh={refresh}>
@@ -75,6 +77,21 @@ export default function History() {
           placeholder="Category"
           options={[{ value: 'all', label: 'All categories' }, ...categories.map((c) => ({ value: c.id, label: `${c.emoji} ${c.name}` }))]}
         />
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        {['day', 'week'].map((g) => (
+          <button
+            key={g}
+            onClick={() => setGroupBy(g)}
+            className={cn(
+              'flex-1 rounded-xl border-2 py-2 text-sm font-medium capitalize transition',
+              groupBy === g ? 'border-primary bg-muted' : 'border-border bg-card text-muted-foreground'
+            )}
+          >
+            {g}
+          </button>
+        ))}
       </div>
 
       {months.length === 0 ? (
@@ -143,7 +160,9 @@ export default function History() {
                 <div key={day} className="mb-5">
                   <div className="flex justify-between items-center mb-1 px-2">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                      {new Date(day).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                      {groupBy === 'week'
+                        ? `Week of ${new Date(day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+                        : new Date(day).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                     </p>
                     <p className="text-xs text-muted-foreground">{formatCurrency(total)}</p>
                   </div>
