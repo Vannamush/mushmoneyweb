@@ -29,6 +29,7 @@ import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import DeleteAccount from '@/pages/DeleteAccount';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -73,6 +74,7 @@ const AuthenticatedApp = () => {
           <Route path="/pay" element={<Pay />} />
           <Route path="/savings" element={<Savings />} />
           <Route path="/section" element={<Section />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
         </Route>
         <Route path="/book" element={<BookLayout />}>
           <Route index element={<BookHome />} />

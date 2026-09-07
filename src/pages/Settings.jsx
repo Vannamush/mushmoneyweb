@@ -258,19 +258,7 @@ export default function Settings() {
           </div>
         </button>
         <button
-          onClick={async () => {
-            if (!confirm('Delete your account? This permanently removes your data and logs you out. This cannot be undone.')) return;
-            try {
-              await base44.functions.invoke('deleteAccount', {});
-            } catch (e) {
-              // continue to logout even if cleanup fails
-            }
-            try {
-              await base44.auth.logout();
-            } catch (e) {
-              await base44.auth.logout();
-            }
-          }}
+          onClick={() => navigate('/delete-account')}
           className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-red-200 bg-red-50 p-4 text-red-600 font-medium no-select"
         >
           <Trash2 className="h-5 w-5" />
