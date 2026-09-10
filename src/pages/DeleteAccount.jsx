@@ -21,11 +21,7 @@ export default function DeleteAccount() {
       } catch (e) {
         // continue to logout even if cleanup fails
       }
-      try {
-        await base44.auth.logout();
-      } catch (e) {
-        await base44.auth.logout();
-      }
+      await base44.auth.logout();
     } catch (e) {
       setError('Something went wrong. Please try again.');
       setDeleting(false);
